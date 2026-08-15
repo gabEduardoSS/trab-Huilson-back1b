@@ -1,0 +1,113 @@
+package com.example.huilsonbackendprojeto1b.sistema.handlers
+
+import com.example.huilsonbackendprojeto1b.controller.ProdutoController
+import com.example.huilsonbackendprojeto1b.enumeradores.Cor
+import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
+import com.example.huilsonbackendprojeto1b.enumeradores.Material
+import com.example.huilsonbackendprojeto1b.produto.CaixaDaAgua
+import com.example.huilsonbackendprojeto1b.service.ProdutoService
+import org.springframework.stereotype.Component
+
+@Component
+class ProdutoHandler(
+    private val produtoService: ProdutoService
+): CrudHandler {
+    override fun cadastrar() {
+        print("Digite a marca: ")
+        val marca = readln()
+
+        print("Digite o modelo: ")
+        val modelo = readln()
+
+        print("Digite a altura: ")
+        val altura = readln().replace(",", ".").toDouble()
+
+        print("Digita a largura: ")
+        val largura = readln().replace(",", ".").toDouble()
+
+        print("Digita a profundidade: ")
+        val profundidade = readln().replace(",", ".").toDouble()
+
+        val dimensao: MutableList<Double> = mutableListOf(altura, largura, profundidade)
+
+        println("Escolha a cor: ")
+        var cor: Cor
+        Cor.entries.forEach { c ->
+            println("${c.ordinal} - ${c.name.replace("_", " ")}")
+        }
+        do {
+            val codigoCor = readln().toInt()
+            if(codigoCor !in Cor.entries.indices){
+                println("Código da cor não existe")
+                continue
+            }
+            cor = Cor.entries[codigoCor]
+            break
+        } while(true)
+
+        println("Escolha o material: ")
+        var material : Material
+        Material.entries.forEach { m ->
+            println("${m.ordinal} - ${m.name.replace("_", " ")}")
+        }
+        do {
+            val codigoMaterial = readln().toInt()
+            if(codigoMaterial !in Material.entries.indices){
+                println("Código do material não existe")
+                continue
+            }
+            material = Material.entries[codigoMaterial]
+            break
+        } while(true)
+
+        println("Escolha o formato: ")
+        var formato : Formatos
+        Formatos.entries.forEach { f ->
+            println("${f.ordinal} - ${f.name.replace("_", " ")}")
+        }
+        do {
+            val codigoFormato = readln().toInt()
+            if(codigoFormato !in Formatos.entries.indices){
+                println("Código do formato não existe")
+                continue
+            }
+            formato = Formatos.entries[codigoFormato]
+            break
+        } while(true)
+
+        print("Digite o fornecedor: ")
+        val fornecedor = readln()
+
+        print("Digite o preço: ")
+        val preco = readln().replace(",", ".").toBigDecimal()
+
+        val produto: CaixaDaAgua = CaixaDaAgua(
+            marca = marca,
+            modelo = modelo,
+            dimensao = dimensao,
+            cor = cor,
+            material = material,
+            formato = formato,
+            fornecedor = fornecedor,
+            preco = preco.toString()
+        )
+
+        try{
+            produtoService.cadastrarProduto(produto)
+        } catch (e : Exception){
+            println("Erro ao cadastrar produto: $e")
+        }
+        println("Cadastrado: ${produto.valores()}")
+    }
+
+    override fun consultar() {
+        println(produtoService.consultarProdutos())
+    }
+    override fun alterar() {
+        println("Produto alterado")
+    }
+    override fun excluir() {
+        println("Produto excluido")
+    }
+
+}
