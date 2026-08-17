@@ -13,13 +13,13 @@ import jakarta.persistence.InheritanceType
 //@Entity
 //@Inheritance(strategy = InheritanceType.JOINED)
 open class Pessoa (
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null,
 
     open var nome: String = "",
     open var cpf: String = "",
     open var idade: Int = 0,
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     open var tipo: TipoPessoa = TipoPessoa.CLIENTE
 ){}

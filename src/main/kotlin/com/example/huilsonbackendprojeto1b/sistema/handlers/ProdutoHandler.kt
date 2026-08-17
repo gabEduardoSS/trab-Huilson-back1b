@@ -1,12 +1,12 @@
 package com.example.huilsonbackendprojeto1b.sistema.handlers
 
-import com.example.huilsonbackendprojeto1b.controller.ProdutoController
 import com.example.huilsonbackendprojeto1b.enumeradores.Cor
 import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
-import com.example.huilsonbackendprojeto1b.produto.CaixaDaAgua
+import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import org.springframework.stereotype.Component
+import sun.jvm.hotspot.HelloWorld.e
 
 @Component
 class ProdutoHandler(
@@ -81,7 +81,7 @@ class ProdutoHandler(
         print("Digite o preço: ")
         val preco = readln().replace(",", ".").toBigDecimal()
 
-        val produto: CaixaDaAgua = CaixaDaAgua(
+        val produto: CaixaDeAgua = CaixaDeAgua(
             marca = marca,
             modelo = modelo,
             dimensao = dimensao,
@@ -101,7 +101,19 @@ class ProdutoHandler(
     }
 
     override fun consultar() {
-        println(produtoService.consultarProdutos())
+        val produtos = produtoService.consultarProdutos()
+        if(produtos.isEmpty()){
+            print("Não há produtos cadastrados, deseja cadastrar?(S/N): ")
+            when(readln().uppercase()){
+                "S" -> cadastrar()
+                "N" -> println("Retornando")
+                else -> println("Opção inválida, retornando")
+            }
+            return
+        }
+        produtos.forEach { produto ->
+            println(produto.valores())
+        }
     }
     override fun alterar() {
         println("Produto alterado")

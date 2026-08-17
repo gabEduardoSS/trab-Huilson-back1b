@@ -2,10 +2,7 @@ package com.example.huilsonbackendprojeto1b.produto
 
 import com.example.huilsonbackendprojeto1b.enumeradores.Cor
 import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
-import com.example.huilsonbackendprojeto1b.enumeradores.Habilidade
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
-import com.example.huilsonbackendprojeto1b.enumeradores.Turno
-import com.example.huilsonbackendprojeto1b.pessoas.Instalador
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -16,7 +13,7 @@ import java.math.BigDecimal
 
 
 @Entity
-open class CaixaDaAgua(
+open class CaixaDeAgua(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = 0,
@@ -47,13 +44,14 @@ open class CaixaDaAgua(
 ){
     open fun valores() : String{
         return """
-            $marca
-            $modelo
-            $dimensao
-            $cor
-            $material
-            $formato
-            $fornecedor
+            $id,
+            $marca,
+            $modelo,
+            $dimensao,
+            $cor,
+            $material,
+            $formato,
+            $fornecedor,
             $preco
         """.trimIndent()
     }
