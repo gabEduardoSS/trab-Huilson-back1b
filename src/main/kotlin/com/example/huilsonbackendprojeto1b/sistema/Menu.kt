@@ -1,10 +1,9 @@
 package com.example.huilsonbackendprojeto1b.sistema
 
 import com.example.huilsonbackendprojeto1b.enumeradores.OpcoesMenu
-import com.example.huilsonbackendprojeto1b.enumeradores.OpcoesSubMenu
-import com.example.huilsonbackendprojeto1b.sistema.handlers.CrudHandler
+import com.example.huilsonbackendprojeto1b.sistema.handlers.OpcoesHandler
 
-fun mainMenu(handlers: Map<OpcoesMenu, CrudHandler>) {
+fun mainMenu(handlers: Map<OpcoesMenu, OpcoesHandler>) {
     do {
         var opcao = 0;
         var subOpcao = 0;
@@ -28,33 +27,30 @@ fun mainMenu(handlers: Map<OpcoesMenu, CrudHandler>) {
             break
         }
 
+        val handler = handlers[OpcoesMenu.entries[opcao]] ?: continue
+        val opcoesHandler = handler.opcoes()
+
         println()
         println("----<| ${OpcoesMenu.entries[opcao]} |>----")
-        OpcoesSubMenu.entries.forEachIndexed { i, it ->
-            println("${i} - $it")
+        println("0 - Voltar")
+
+        opcoesHandler.forEachIndexed { index, (texto, func) ->
+            println("${index+1} - $texto")
         }
-        do {
+
+        do{
             print("Insira a opção: ")
             subOpcao = readln().toInt()
-            if(subOpcao !in OpcoesSubMenu.entries.indices){
-                println("Opção incorreta")
+            if(opcao !in 0..<opcoesHandler.size){
+                println("Opção inválida")
                 continue
             }
             break
-        }while (true)
+        } while(true)
 
-        if(OpcoesSubMenu.entries[subOpcao] == OpcoesSubMenu.VOLTAR){
-            continue
-        }
+        if(subOpcao == 0) continue
 
-        val handler = handlers[OpcoesMenu.entries[opcao]] ?: continue
-        when(OpcoesSubMenu.entries[subOpcao]){
-            OpcoesSubMenu.VOLTAR -> continue
-            OpcoesSubMenu.CADASTRAR -> handler.cadastrar()
-            OpcoesSubMenu.CONSULTAR -> handler.consultar()
-            OpcoesSubMenu.ALTERAR -> handler.alterar()
-            OpcoesSubMenu.EXCLUIR -> handler.excluir()
-        }
+        opcoesHandler[subOpcao-1].second.invoke() // Chama a função da opção específica, sendo ela o segundo elemento do pair
 
     } while (true)
 }

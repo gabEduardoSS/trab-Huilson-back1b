@@ -6,13 +6,21 @@ import com.example.huilsonbackendprojeto1b.enumeradores.Material
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import org.springframework.stereotype.Component
-import sun.jvm.hotspot.HelloWorld.e
 
 @Component
 class ProdutoHandler(
     private val produtoService: ProdutoService
-): CrudHandler {
-    override fun cadastrar() {
+): OpcoesHandler {
+    override fun opcoes(): List<Pair<String, () -> Unit>> = listOf( // Reescreve a função do handler com as opções disponíveis
+        "Cadastrar" to ::cadastrar,
+        "Consultar" to ::consultarAtivos,
+        "Consultar desativados" to ::consultarDesativados,
+        "Alterar" to ::alterar,
+        "Desativar" to ::desativar,
+        "Reativar" to ::reativar,
+    )
+
+    private fun cadastrar() {
         print("Digite a marca: ")
         val marca = readln()
 
@@ -100,8 +108,8 @@ class ProdutoHandler(
         println("Cadastrado: ${produto.valores()}")
     }
 
-    override fun consultar() {
-        val produtos = produtoService.consultarProdutos()
+    private fun consultarAtivos() {
+        val produtos = produtoService.consultarAtivos()
         if(produtos.isEmpty()){
             print("Não há produtos cadastrados, deseja cadastrar?(S/N): ")
             when(readln().uppercase()){
@@ -115,11 +123,20 @@ class ProdutoHandler(
             println(produto.valores())
         }
     }
-    override fun alterar() {
+
+    private fun consultarDesativados(){
+
+    }
+
+    private fun alterar() {
         println("Produto alterado")
     }
-    override fun excluir() {
-        println("Produto excluido")
+    private fun desativar() {
+        println("Produto desativado")
+    }
+
+    private fun reativar(){
+        println("Produto reativado")
     }
 
 }

@@ -1,18 +1,26 @@
 package com.example.huilsonbackendprojeto1b.sistema.handlers
 
-object FuncionarioHandler: CrudHandler {
-    override fun cadastrar() {
-        println("Funcionario cadastrado")
+object FuncionarioHandler: OpcoesHandler {
+    override fun opcoes(): List<Pair<String, () -> Unit>> = listOf(
+        "Cadastrar" to ::cadastrar,
+        "Consultar" to ::consultar,
+        "Alterar" to ::alterar,
+        "Excluir" to ::excluir
+    )
+
+    private fun cadastrar(){
+        println("Funcionário cadastrado")
     }
 
-    override fun consultar() {
-        println("Funcionario consultado")
+    private fun consultar(){
+        println("Consultar funcionários")
     }
-    override fun alterar() {
+
+    private fun alterar(){
         println("Funcionario alterado")
     }
-    override fun excluir() {
+
+    private fun excluir(){
         println("Funcionario excluido")
     }
-
 }

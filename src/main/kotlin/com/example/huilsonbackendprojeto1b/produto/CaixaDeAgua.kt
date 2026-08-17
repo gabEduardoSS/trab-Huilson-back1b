@@ -40,7 +40,8 @@ open class CaixaDeAgua(
         habilidade = Habilidade.INSTALACAO
     )*/
     var fornecedor : String = "",
-    var preco : String = BigDecimal.ZERO.toString()
+    var preco : String = BigDecimal.ZERO.toString(),
+    var status: String = "ativado"
 ){
     open fun valores() : String{
         return """
@@ -53,6 +54,7 @@ open class CaixaDeAgua(
             $formato,
             $fornecedor,
             $preco
+            $status
         """.trimIndent()
     }
 }
