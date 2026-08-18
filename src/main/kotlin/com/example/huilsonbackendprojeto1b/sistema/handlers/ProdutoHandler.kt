@@ -13,11 +13,11 @@ class ProdutoHandler(
 ): OpcoesHandler {
     override fun opcoes(): List<Pair<String, () -> Unit>> = listOf( // Reescreve a função do handler com as opções disponíveis
         "Cadastrar" to ::cadastrar,
-        "Consultar" to ::consultarAtivos,
-        "Consultar desativados" to ::consultarDesativados,
+        "Consultar" to {consultarStatus("ativo")},
+        "Consultar desativados" to {consultarStatus("desativado")},
         "Alterar" to ::alterar,
-        "Desativar" to ::desativar,
-        "Reativar" to ::reativar,
+        "Desativar" to {alterarStatus("desativar")},
+        "Reativar" to {alterarStatus("ativar")},
     )
 
     private fun cadastrar() {
@@ -108,26 +108,19 @@ class ProdutoHandler(
         println("Cadastrado: ${produto.valores()}")
     }
 
-    private fun consultarAtivos() {
-        val produtos = produtoService.consultarPorStatus("ativado")
+    private fun consultarStatus(tipo: String) {
+        val produtos = produtoService.consultarPorStatus(tipo)
         if(produtos.isEmpty()){
-            print("Não há produtos ativos, deseja cadastrar?(S/N): ")
-            when(readln().uppercase()){
-                "S" -> cadastrar()
-                "N" -> println("Retornando")
-                else -> println("Opção inválida, retornando")
+            if(tipo == "ativo") {
+                print("Não há produtos ativos, deseja cadastrar?(S/N): ")
+                when(readln().uppercase()){
+                    "S" -> cadastrar()
+                    "N" -> println("Retornando")
+                    else -> println("Opção inválida, retornando")
+                }
+            } else if(tipo == "desativado"){
+                print("Não há produtos desativados")
             }
-            return
-        }
-        produtos.forEach { produto ->
-            println(produto.valores())
-        }
-    }
-
-    private fun consultarDesativados(){
-        val produtos = produtoService.consultarPorStatus("desativado")
-        if(produtos.isEmpty()){
-            print("Não há produtos desativados")
             return
         }
         produtos.forEach { produto ->
@@ -138,16 +131,19 @@ class ProdutoHandler(
     private fun alterar() {
         println("Produto alterado")
     }
-    private fun desativar() {
-        val produtos = produtoService.consultarPorStatus("ativado")
+    private fun alterarStatus(tipo: String) {
+        val stringTipo = if(tipo == "ativar") "ativo" else "desativado"
+        val stringConsulta = if(tipo == "ativar") "desativado" else "ativo"
+        println(stringTipo)
+        val produtos = produtoService.consultarPorStatus(stringConsulta)
         val IDs: MutableList<Long?> = mutableListOf()
 
         if(produtos.isEmpty()){
-            print("Não há produtos ativos")
+            print("Não há produtos ${stringConsulta}s")
             return
         }
 
-        println("----<| Produtos ativos |>----")
+        println("----<| Produtos ${stringConsulta}s |>----")
         produtos.forEach { produto ->
             IDs.add(produto.id)
             println(produto.valores())
@@ -155,7 +151,7 @@ class ProdutoHandler(
 
         var idProduto: Long = 0
         do{
-            print("Insira o ID do produto a ser desativado: ")
+            print("Insira o ID do produto a ser $stringTipo: ")
             idProduto = readln().toLong()
             if(idProduto !in IDs){
                 println("ID inválido")
@@ -164,36 +160,6 @@ class ProdutoHandler(
             break
         } while(true)
 
-        produtoService.alterarStatus(idProduto, "desativado")
+        produtoService.alterarStatus(idProduto, stringTipo)
     }
-
-    private fun reativar(){
-        val produtos = produtoService.consultarPorStatus("desativado")
-        val IDs: MutableList<Long?> = mutableListOf()
-
-        if(produtos.isEmpty()){
-            print("Não há produtos ativos")
-            return
-        }
-
-        println("----<| Produtos desativados |>----")
-        produtos.forEach { produto ->
-            IDs.add(produto.id)
-            println(produto.valores())
-        }
-
-        var idProduto: Long = 0
-        do{
-            print("Insira o ID do produto a ser reativado: ")
-            idProduto = readln().toLong()
-            if(idProduto !in IDs){
-                println("ID inválido")
-                continue
-            }
-            break
-        } while(true)
-
-        produtoService.alterarStatus(idProduto, "ativado")
-    }
-
 }

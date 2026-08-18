@@ -43,7 +43,7 @@ open class CaixaDeAgua(
     )*/
     var fornecedor : String = "",
     var preco : String = BigDecimal.ZERO.toString(),
-    var status: String = "ativado"
+    var status: String = "ativo"
 ){
     open fun valores() : String{
         return """

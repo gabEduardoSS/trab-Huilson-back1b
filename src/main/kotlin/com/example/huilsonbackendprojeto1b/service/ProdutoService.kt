@@ -24,7 +24,7 @@ class ProdutoService(
     fun alterarStatus(id: Long, status: String) {
         try{
             repository.updateStatus(id, status)
-            println("Produto desativado")
+            println("Produto ${if(status == "desativado") status else "reativado"}")
         } catch (e: SQLException) {
             println("ERRO: ${e.printStackTrace()}")
         }
