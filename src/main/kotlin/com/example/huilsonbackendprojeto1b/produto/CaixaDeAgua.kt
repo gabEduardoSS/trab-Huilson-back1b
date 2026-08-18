@@ -9,10 +9,12 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.math.BigDecimal
 
 
 @Entity
+@Table(name = "caixa_de_agua")
 open class CaixaDeAgua(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,16 +47,19 @@ open class CaixaDeAgua(
 ){
     open fun valores() : String{
         return """
-            $id,
-            $marca,
-            $modelo,
-            $dimensao,
-            $cor,
-            $material,
-            $formato,
-            $fornecedor,
-            $preco
-            $status
+            
+        ID: $id,
+        marca: $marca,
+        modelo: $modelo,
+        dimensão(AxLxP): $dimensao,
+        cor: $cor,
+        material: $material,
+        formato: $formato,
+        fornecedor: $fornecedor,
+        preço: $preco
+        status: $status
+        ---------------------
+        
         """.trimIndent()
     }
 }

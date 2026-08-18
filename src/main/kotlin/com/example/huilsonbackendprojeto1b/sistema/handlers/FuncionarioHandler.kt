@@ -1,5 +1,8 @@
 package com.example.huilsonbackendprojeto1b.sistema.handlers
 
+import org.springframework.stereotype.Component
+
+@Component
 object FuncionarioHandler: OpcoesHandler {
     override fun opcoes(): List<Pair<String, () -> Unit>> = listOf(
         "Cadastrar" to ::cadastrar,

@@ -101,7 +101,7 @@ class ProdutoHandler(
         )
 
         try{
-            produtoService.cadastrarProduto(produto)
+            produtoService.salvarProduto(produto)
         } catch (e : Exception){
             println("Erro ao cadastrar produto: $e")
         }
@@ -109,9 +109,9 @@ class ProdutoHandler(
     }
 
     private fun consultarAtivos() {
-        val produtos = produtoService.consultarAtivos()
+        val produtos = produtoService.consultarPorStatus("ativado")
         if(produtos.isEmpty()){
-            print("Não há produtos cadastrados, deseja cadastrar?(S/N): ")
+            print("Não há produtos ativos, deseja cadastrar?(S/N): ")
             when(readln().uppercase()){
                 "S" -> cadastrar()
                 "N" -> println("Retornando")
@@ -125,18 +125,75 @@ class ProdutoHandler(
     }
 
     private fun consultarDesativados(){
-
+        val produtos = produtoService.consultarPorStatus("desativado")
+        if(produtos.isEmpty()){
+            print("Não há produtos desativados")
+            return
+        }
+        produtos.forEach { produto ->
+            println(produto.valores())
+        }
     }
 
     private fun alterar() {
         println("Produto alterado")
     }
     private fun desativar() {
-        println("Produto desativado")
+        val produtos = produtoService.consultarPorStatus("ativado")
+        val IDs: MutableList<Long?> = mutableListOf()
+
+        if(produtos.isEmpty()){
+            print("Não há produtos ativos")
+            return
+        }
+
+        println("----<| Produtos ativos |>----")
+        produtos.forEach { produto ->
+            IDs.add(produto.id)
+            println(produto.valores())
+        }
+
+        var idProduto: Long = 0
+        do{
+            print("Insira o ID do produto a ser desativado: ")
+            idProduto = readln().toLong()
+            if(idProduto !in IDs){
+                println("ID inválido")
+                continue
+            }
+            break
+        } while(true)
+
+        produtoService.alterarStatus(idProduto, "desativado")
     }
 
     private fun reativar(){
-        println("Produto reativado")
+        val produtos = produtoService.consultarPorStatus("desativado")
+        val IDs: MutableList<Long?> = mutableListOf()
+
+        if(produtos.isEmpty()){
+            print("Não há produtos ativos")
+            return
+        }
+
+        println("----<| Produtos desativados |>----")
+        produtos.forEach { produto ->
+            IDs.add(produto.id)
+            println(produto.valores())
+        }
+
+        var idProduto: Long = 0
+        do{
+            print("Insira o ID do produto a ser reativado: ")
+            idProduto = readln().toLong()
+            if(idProduto !in IDs){
+                println("ID inválido")
+                continue
+            }
+            break
+        } while(true)
+
+        produtoService.alterarStatus(idProduto, "ativado")
     }
 
 }
