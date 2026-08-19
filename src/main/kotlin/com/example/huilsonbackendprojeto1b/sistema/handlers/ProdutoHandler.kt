@@ -11,16 +11,17 @@ import org.springframework.stereotype.Component
 class ProdutoHandler(
     private val produtoService: ProdutoService
 ): OpcoesHandler {
-    override fun opcoes(): List<Pair<String, () -> Unit>> = listOf( // Reescreve a função do handler com as opções disponíveis
-        "Cadastrar" to ::cadastrar,
-        "Consultar" to {consultarStatus("ativo")},
-        "Consultar desativados" to {consultarStatus("desativado")},
+    override fun opcoes(): List<Pair<String, () -> Unit>> = listOf(
+        // Reescreve a função do handler com as opções disponíveis
+        "Cadastrar" to { salvar() },
+        "Consultar" to { consultarStatus("ativo") },
+        "Consultar desativados" to { consultarStatus("desativado") },
         "Alterar" to ::alterar,
-        "Desativar" to {alterarStatus("desativar")},
-        "Reativar" to {alterarStatus("ativar")},
+        "Desativar" to { alterarStatus("desativar") },
+        "Reativar" to { alterarStatus("ativar") },
     )
 
-    private fun cadastrar() {
+    private fun salvar() {
         print("Digite a marca: ")
         val marca = readln()
 
@@ -89,7 +90,7 @@ class ProdutoHandler(
         print("Digite o preço: ")
         val preco = readln().replace(",", ".").toBigDecimal()
 
-        val produto: CaixaDeAgua = CaixaDeAgua(
+        val produto = CaixaDeAgua(
             marca = marca,
             modelo = modelo,
             dimensao = dimensao,
@@ -114,7 +115,7 @@ class ProdutoHandler(
             if(tipo == "ativo") {
                 print("Não há produtos ativos, deseja cadastrar?(S/N): ")
                 when(readln().uppercase()){
-                    "S" -> cadastrar()
+                    "S" -> salvar()
                     "N" -> println("Retornando")
                     else -> println("Opção inválida, retornando")
                 }
@@ -131,6 +132,7 @@ class ProdutoHandler(
     private fun alterar() {
         println("Produto alterado")
     }
+
     private fun alterarStatus(tipo: String) {
         val stringTipo = if(tipo == "ativar") "ativo" else "desativado"
         val stringConsulta = if(tipo == "ativar") "desativado" else "ativo"
