@@ -6,18 +6,19 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 //@Entity
 class Cliente(
     nome: String = "",
     cpf: String = "",
-    idade: Int = 0,
-    var dividasAbertas: Boolean? = null,
-    var parcelasAPagar : MutableList<BigDecimal>? = null,
+    dtNasc: LocalDate? = null,
+    var dividasAbertas: Boolean = false,
 ) : Pessoa(
     nome = nome,
     cpf = cpf,
-    idade = idade,
-    tipo = TipoPessoa.CLIENTE
+    dtNasc = dtNasc,
+    tipo = TipoPessoa.CLIENTE,
 ){
 }
