@@ -12,20 +12,17 @@ import jakarta.persistence.InheritanceType
 import java.time.LocalDate
 import java.util.Date
 
-//@Entity
-//@Inheritance(strategy = InheritanceType.JOINED)
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 open class Pessoa (
-    //@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null,
 
     open var nome: String = "",
     open var cpf: String = "",
     open var email: String = "",
     open var dtNasc: LocalDate? = LocalDate.of(9999, 1, 1),
-    open var criacao: LocalDate = LocalDate.now(),
 
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     open var tipo: TipoPessoa = TipoPessoa.CLIENTE,
-
-    open var status: String = "ativo"
 ){}

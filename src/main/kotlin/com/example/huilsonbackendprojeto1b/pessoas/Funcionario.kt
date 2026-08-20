@@ -17,10 +17,10 @@ class Funcionario (
     dtNasc : LocalDate = LocalDate.of(1969, 1, 1),
     val salario : BigDecimal = "1712.00".toBigDecimal(),
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     val turno : Turno = Turno.MATUTINO,
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     val cargo: Cargo = Cargo.ATENDENTE,
 ) : Pessoa(
     nome = nome,

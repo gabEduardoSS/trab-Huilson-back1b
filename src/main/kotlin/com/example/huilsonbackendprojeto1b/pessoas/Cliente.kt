@@ -9,12 +9,14 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-//@Entity
+@Entity
 class Cliente(
     nome: String = "",
     cpf: String = "",
     dtNasc: LocalDate? = null,
     var dividasAbertas: Boolean = false,
+    val dtCriacao: LocalDate = LocalDate.now(),
+    var status: String = "ativo"
 ) : Pessoa(
     nome = nome,
     cpf = cpf,

@@ -24,7 +24,7 @@ class Transacao(
         caixa.saldo += valorTransacao
         return "\nTransação bem sucedida:\n" +
                 "   Data/Hora: $dataMovimentacao\n" +
-                "   Tipo: ${tipoMovimentacao.getString()}\n" +
+                "   Tipo: ${tipoMovimentacao}\n" +
                 "   Saldo: R$${valorAnterior} -> R$${format(caixa.saldo)} (R$${format(valorTransacao)})\n" +
                 "   Nome: ${pessoa.nome}, CPF: ${pessoa.cpf}\n"
     }

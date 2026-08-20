@@ -5,6 +5,7 @@ import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
+import com.example.huilsonbackendprojeto1b.utils.userInput
 import com.example.huilsonbackendprojeto1b.utils.validarCampoNumerico
 import org.springframework.stereotype.Component
 
@@ -23,11 +24,9 @@ class ProdutoHandler(
     )
 
     private fun cadastrarProduto() {
-        print("Digite a marca: ")
-        val marca = readln()
+        val marca = userInput("Digite a marca: ")
 
-        print("Digite o modelo: ")
-        val modelo = readln()
+        val modelo = userInput("Digite o modelo: ")
 
         val altura = validarCampoNumerico("Digite a altura: ").toDouble()
 
@@ -79,8 +78,7 @@ class ProdutoHandler(
             break
         } while (true)
 
-        print("Digite o fornecedor: ")
-        val fornecedor = readln()
+        val fornecedor = userInput("Digite o fornecedor: ")
 
         val preco = validarCampoNumerico("Digite o preço: ").toBigDecimal()
 
