@@ -1,7 +1,3 @@
--- Script de criação das tabelas usadas pelo projeto.
--- Antes o Hibernate criava isso sozinho (hibernate.hbm2ddl.auto=update).
--- Em JDBC puro isso não existe mais, então esse schema precisa ser criado manualmente.
-
 CREATE TABLE pessoa (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -22,7 +18,7 @@ CREATE TABLE cliente (
 
 CREATE TABLE funcionario (
     id BIGINT PRIMARY KEY REFERENCES pessoa(id),
-    salario NUMERIC(10, 2) NOT NULL,
+    salario NUMERIC(19, 4) NOT NULL,
     turno VARCHAR(20) NOT NULL,
     cargo VARCHAR(30) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'ativo'
@@ -45,3 +41,17 @@ CREATE TABLE caixa_de_agua (
     dt_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE caixa(
+    id BIGSERIAL PRIMARY KEY,
+    saldo NUMERIC(19, 4) NOT NULL
+);
+
+INSERT INTO caixa(saldo) VALUES (100000);
+
+CREATE TABLE movimentacao(
+    id BIGSERIAL PRIMARY KEY,
+    id_caixa BIGINT REFERENCES caixa(id),
+    id_produto BIGINT REFERENCES caixa_de_agua(id),
+    quantidade INT NOT NULL,
+    tipo VARCHAR(30) NOT NULL
+);

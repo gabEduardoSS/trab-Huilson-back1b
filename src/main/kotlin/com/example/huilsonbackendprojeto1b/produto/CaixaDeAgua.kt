@@ -34,8 +34,6 @@ open class CaixaDeAgua(
 
     var status: String = "ativo",
 
-    var quantidadeMinima: Int? = 0,
-    var quantidadeMaxima: Int? = 0,
     var quantidade: Int = 0,
 
     val dtCriacao: LocalDateTime = LocalDateTime.now()
@@ -54,8 +52,6 @@ open class CaixaDeAgua(
         Preço: ${formatacaoDinheiro(preco)}
         Status: $status
         Estoque Atual: $quantidade,
-        Estoque Minimo: $quantidadeMinima,
-        Estoque Máximo: $quantidadeMaxima,
         Data de Criação: ${dtCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))},
         ---------------------
         

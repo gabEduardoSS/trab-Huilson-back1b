@@ -5,7 +5,6 @@ import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
 import java.sql.Statement
 
@@ -17,8 +16,8 @@ class JPAProduto(
         try {
             c = JPAConexao().conectar()
             val sql = "INSERT INTO caixa_de_agua " +
-                    "(marca, modelo, dimensao, cor, material, formato, fornecedor, preco, quantidade, quantidade_minima, quantidade_maxima, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)"
+                    "(marca, modelo, dimensao, cor, material, formato, fornecedor, preco, quantidade, status) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)"
 
             val stmt = c!!.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
 
@@ -32,9 +31,7 @@ class JPAProduto(
             stmt.setString(6, a.formato.name)
             stmt.setString(7, a.fornecedor)
             stmt.setBigDecimal(8, a.preco)
-            stmt.setObject(9, a.quantidadeMinima)
-            stmt.setObject(10, a.quantidadeMaxima)
-            stmt.setString(11, a.status)
+            stmt.setString(9, a.status)
 
             stmt.executeUpdate()
 
@@ -93,8 +90,6 @@ class JPAProduto(
                     preco = resultado.getBigDecimal("preco"),
                     dtCriacao = resultado.getTimestamp("dt_criacao").toLocalDateTime(),
                     quantidade = resultado.getInt("quantidade"),
-                    quantidadeMinima = resultado.getInt("quantidade_minima"),
-                    quantidadeMaxima = resultado.getInt("quantidade_maxima"),
                     status = resultado.getString("status"),
                 )
                 produtos.add(produto)
@@ -112,10 +107,9 @@ class JPAProduto(
     fun editar(caixa: CaixaDeAgua, id: Long): CaixaDeAgua {
         try {
             c = JPAConexao().conectar()
-            // Antes só atualizava preco, marca, modelo e formato.
-            // Corrigido para atualizar todos os campos editáveis.
+
             val sql = "UPDATE caixa_de_agua SET marca = ?, modelo = ?, dimensao = ?, cor = ?, " +
-                    "material = ?, formato = ?, fornecedor = ?, preco = ?, quantidade = 0 ,quantidade_minima = ?, quantidade_maxima = ? WHERE id = ?"
+                    "material = ?, formato = ?, fornecedor = ?, preco = ?, quantidade = 0 WHERE id = ?"
 
             val stmt = c!!.prepareStatement(sql)
             val doublePrecision = c!!.createArrayOf("float8", caixa.dimensao.toTypedArray())
@@ -128,9 +122,7 @@ class JPAProduto(
             stmt.setString(6, caixa.formato.name)
             stmt.setString(7, caixa.fornecedor)
             stmt.setBigDecimal(8, caixa.preco)
-            stmt.setObject(9, caixa.quantidadeMinima)
-            stmt.setObject(10, caixa.quantidadeMaxima)
-            stmt.setLong(11, id)
+            stmt.setLong(9, id)
 
             stmt.executeUpdate()
             stmt.close()
@@ -144,12 +136,12 @@ class JPAProduto(
         return caixa
     }
 
-    fun alterarStatus(id: Long, status: String) {
+    fun alterarCampo(id: Long, campo: String, valor: String) {
         try {
             c = JPAConexao().conectar()
-            val sql = "UPDATE caixa_de_agua SET status = ? WHERE id = ?"
+            val sql = "UPDATE caixa_de_agua SET $campo = ? WHERE id = ?"
             val stmt = c!!.prepareStatement(sql)
-            stmt.setString(1, status)
+            stmt.setString(1, valor)
             stmt.setLong(2, id)
             stmt.executeUpdate()
             stmt.close()

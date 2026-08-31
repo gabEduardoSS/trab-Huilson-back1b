@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="huilsonbackendprojeto1b" />
+        <module name="huilson-backend-projeto1b" />
       </profile>
     </annotationProcessing>
   </component>

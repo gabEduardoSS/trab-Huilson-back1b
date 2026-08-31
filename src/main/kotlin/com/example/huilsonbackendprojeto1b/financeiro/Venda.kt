@@ -1,6 +1,7 @@
 package com.example.huilsonbackendprojeto1b.financeiro
 
 import com.example.huilsonbackendprojeto1b.enumeradores.Cargo
+import com.example.huilsonbackendprojeto1b.enumeradores.StatusVenda
 import com.example.huilsonbackendprojeto1b.pessoas.Cliente
 import com.example.huilsonbackendprojeto1b.pessoas.Funcionario
 import java.time.LocalDateTime
@@ -12,7 +13,7 @@ class Venda (
     var cliente: Cliente,
     var vendedor: Funcionario,
     var valorDesconto: Double = 0.0,
-    var statusVenda: String = "ativo",
+    var statusVenda: StatusVenda = StatusVenda.CONCLUIDA,
 
     var itensVenda: MutableList<ItemVenda>,
 
