@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/schema.sql" value="1934ea17-5a61-4798-a66e-611e43031192" />
+    <file url="file://$PROJECT_DIR$/src/main/kotlin/com/example/huilsonbackendprojeto1b/repositorio/JPAFuncionario.kt" value="1934ea17-5a61-4798-a66e-611e43031192" />
+    <file url="file://$PROJECT_DIR$/src/main/kotlin/com/example/huilsonbackendprojeto1b/repositorio/JPAProduto.kt" value="1934ea17-5a61-4798-a66e-611e43031192" />
+  </component>
+</project>
