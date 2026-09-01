@@ -53,5 +53,6 @@ CREATE TABLE movimentacao(
     id_caixa BIGINT REFERENCES caixa(id),
     id_produto BIGINT REFERENCES caixa_de_agua(id),
     quantidade INT NOT NULL,
-    tipo VARCHAR(30) NOT NULL
+    tipo VARCHAR(30) NOT NULL,
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

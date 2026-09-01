@@ -3,7 +3,9 @@ package com.example.huilsonbackendprojeto1b.sistema.handlers
 import com.example.huilsonbackendprojeto1b.enumeradores.Cor
 import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
+import com.example.huilsonbackendprojeto1b.enumeradores.TipoMovimentacao
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
+import com.example.huilsonbackendprojeto1b.produto.Movimentacao
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import com.example.huilsonbackendprojeto1b.utils.validarCampoString
 import com.example.huilsonbackendprojeto1b.utils.validarCampoNumerico
@@ -19,6 +21,7 @@ class ProdutoHandler(
         "Alterar" to { alterarProduto() },
         "Desativar" to { alterarStatus("desativar") },
         "Reativar" to { alterarStatus("ativar") },
+        "Recebimento" to { recebimento() }
     )
 
     private fun cadastrarProduto() {
@@ -80,19 +83,6 @@ class ProdutoHandler(
 
         val preco = validarCampoNumerico("Digite o preço: ").toBigDecimal()
 
-        val quantidadeMinima = validarCampoNumerico("Digite o quantidade minima no estoque(ou deixe em branco): ", tipo = 1, aceitarBranco = true, nonIntProof = "0").toInt()
-
-        var quantidadeMaxima: Int
-        do{
-            quantidadeMaxima = validarCampoNumerico("Digite o quantidade maxima no estoque(ou deixe em branco): ", tipo = 1, aceitarBranco = true, nonIntProof = "0").toInt()
-            if(quantidadeMaxima < quantidadeMinima){
-                println("Quantidade máxima não pode ser menor que a quantidade mínima")
-                continue
-            }
-            break
-        } while (true)
-
-
         val produto = CaixaDeAgua(
             marca = marca,
             modelo = modelo,
@@ -102,8 +92,6 @@ class ProdutoHandler(
             formato = formato,
             fornecedor = fornecedor,
             preco = preco,
-            quantidadeMinima = quantidadeMinima,
-            quantidadeMaxima = quantidadeMaxima,
         )
 
         try {
@@ -149,7 +137,7 @@ class ProdutoHandler(
             println(produto.valores())
         }
 
-        var idProduto: Long
+        var idProduto: Long = 0
         do {
             idProduto = validarCampoNumerico("Insira o ID do produto a ser alterado: ", tipo = 1).toLong()
             if (idProduto !in IDs) {
@@ -245,12 +233,6 @@ class ProdutoHandler(
         val preco = if (precoInput.isBlank()) produtoAtual.preco
         else precoInput.replace(",", ".").toBigDecimal()
 
-        val quantidadeMinimaInput = validarCampoNumerico("Digite o quantidade minima no estoque(ou deixe em branco): ", tipo = 1, aceitarBranco = true)
-        val quantidadeMinima = quantidadeMinimaInput.ifBlank { produtoAtual.quantidadeMinima }
-
-        val quantidadeMaximaInput = validarCampoNumerico("Digite o quantidade maxima no estoque(ou deixe em branco): ", tipo = 1, aceitarBranco = true)
-        val quantidadeMaxima = quantidadeMaximaInput.ifBlank { produtoAtual.quantidadeMaxima }
-
         val produtoAtualizado = CaixaDeAgua(
             id = produtoAtual.id,
             marca = marca,
@@ -300,5 +282,42 @@ class ProdutoHandler(
         } while (true)
 
         produtoService.alterarStatus(idProduto, status)
+    }
+
+    private fun recebimento(){
+        val produtos = produtoService.listarProdutos()
+        val IDs: MutableList<Pair<Int, Long?>> = mutableListOf()
+
+        if (produtos.isEmpty()) {
+            print("Não há produtos cadastrados")
+            return
+        }
+
+        println("----<| Produtos |>----")
+        produtos.forEachIndexed { idx, produto ->
+            IDs.add(idx to produto.id)
+            println(produto.valores())
+        }
+
+        var idProduto: Long = 0
+        do {
+            print("Insira o ID do produto recebido: ")
+            idProduto = readln().toLong()
+            if (!IDs.any{it.second == idProduto}) {
+                println("ID inválido")
+                continue
+            }
+            break
+        } while (true)
+
+        val quantidade = validarCampoNumerico("Digite a quantidade recebida: ", tipo = 1).toInt()
+
+        val movimentacao = Movimentacao(
+            produto = produtos[IDs.find { it.second == idProduto  }!!.first],
+            quantidade = quantidade,
+            tipo = TipoMovimentacao.ENTRADA
+        )
+
+        movimentacao.movimentar()
     }
 }

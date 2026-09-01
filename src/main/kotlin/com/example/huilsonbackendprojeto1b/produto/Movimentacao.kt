@@ -5,7 +5,7 @@ import com.example.huilsonbackendprojeto1b.repositorio.JPAConexao
 import java.sql.Connection
 import java.sql.SQLException
 
-class Movimentacao(
+open class Movimentacao(
     val id: Long? = null,
 
     val produto: CaixaDeAgua,
@@ -31,8 +31,11 @@ class Movimentacao(
             val stmtProduto = c.prepareStatement(sqlProduto)
             stmtProduto.setInt(1, quantidade)
             stmtProduto.setLong(2, produto.id!!)
+            stmtProduto.executeUpdate()
 
             c.commit()
+
+            println("Produto recebido: quantidade ${produto.quantidade} -> $quantidade")
         } catch(e: SQLException){
             println("Erro: ${e.printStackTrace()}")
             try {
