@@ -1,9 +1,9 @@
 package com.example.huilsonbackendprojeto1b.financeiro
 
-import com.example.huilsonbackendprojeto1b.enumeradores.Cargo
-import com.example.huilsonbackendprojeto1b.enumeradores.StatusVenda
+import com.example.huilsonbackendprojeto1b.enumeradores.StatusFinanceiro
 import com.example.huilsonbackendprojeto1b.pessoas.Cliente
 import com.example.huilsonbackendprojeto1b.pessoas.Funcionario
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 class Venda (
@@ -12,8 +12,8 @@ class Venda (
     var valorTotal: Double,
     var cliente: Cliente,
     var vendedor: Funcionario,
-    var valorDesconto: Double = 0.0,
-    var statusVenda: StatusVenda = StatusVenda.CONCLUIDA,
+    var valorDesconto: BigDecimal = BigDecimal.ZERO,
+    var statusVenda: StatusFinanceiro = StatusFinanceiro.CONCLUIDA,
 
     var itensVenda: MutableList<ItemVenda>,
 

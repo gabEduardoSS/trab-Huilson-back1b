@@ -55,7 +55,7 @@ class JPACliente(
             } catch (ignored: SQLException) {
             }
         } finally {
-            c?.close() // agora garantido mesmo se der erro no meio do caminho
+            c?.close()
         }
         return cliente
     }

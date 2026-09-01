@@ -12,8 +12,16 @@ open class Movimentacao(
     val quantidade: Int,
     val tipo: TipoMovimentacao
 ){
+    fun verificarQuantidade(): Boolean{
+        return !(tipo == TipoMovimentacao.SAIDA && quantidade > produto.quantidade)
+    }
+
     fun movimentar(){
         var c: Connection? = null
+        if(!verificarQuantidade()){
+            println("Movimentação Cancelada: quantidade de saída menor do que a quantidade de produtos em estoque")
+            return
+        }
         try{
             c = JPAConexao().conectar()
             c!!.autoCommit = false
@@ -35,7 +43,7 @@ open class Movimentacao(
 
             c.commit()
 
-            println("Produto recebido: quantidade ${produto.quantidade} -> $quantidade")
+            println("Produto movimentado: quantidade ${produto.quantidade} -> $quantidade")
         } catch(e: SQLException){
             println("Erro: ${e.printStackTrace()}")
             try {

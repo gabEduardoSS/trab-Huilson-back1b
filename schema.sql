@@ -1,3 +1,5 @@
+DROP TABLE cliente, funcionario, pessoa, caixa_de_agua, caixa, movimentacao;
+
 CREATE TABLE pessoa (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,

@@ -1,5 +1,5 @@
 package com.example.huilsonbackendprojeto1b.enumeradores
 
-enum class StatusVenda {
+enum class StatusFinanceiro {
     CONCLUIDA, CANCELADA, REEMBOLSADA
 }
