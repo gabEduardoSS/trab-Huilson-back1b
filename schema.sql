@@ -1,7 +1,7 @@
-DROP TABLE cliente, funcionario, pessoa, caixa_de_agua, caixa, movimentacao;
+DROP TABLE cliente, funcionario, pessoa, caixa_de_agua, caixa, movimentacao, transacao;
 
 CREATE TABLE pessoa (
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     cpf VARCHAR(20) NOT NULL,
     email VARCHAR(255),
@@ -14,12 +14,12 @@ CREATE TABLE pessoa (
 );
 
 CREATE TABLE cliente (
-    id BIGINT PRIMARY KEY REFERENCES pessoa(id),
+    id INT PRIMARY KEY REFERENCES pessoa(id),
     dividas_abertas BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE funcionario (
-    id BIGINT PRIMARY KEY REFERENCES pessoa(id),
+    id INT PRIMARY KEY REFERENCES pessoa(id),
     salario NUMERIC(19, 4) NOT NULL,
     turno VARCHAR(20) NOT NULL,
     cargo VARCHAR(30) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE funcionario (
 );
 
 CREATE TABLE caixa_de_agua (
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     marca VARCHAR(255) NOT NULL,
     modelo VARCHAR(255) NOT NULL,
     dimensao FLOAT8[] NOT NULL,
@@ -44,17 +44,25 @@ CREATE TABLE caixa_de_agua (
 );
 
 CREATE TABLE caixa(
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     saldo NUMERIC(19, 4) NOT NULL
 );
 
 INSERT INTO caixa(saldo) VALUES (100000);
 
 CREATE TABLE movimentacao(
-    id BIGSERIAL PRIMARY KEY,
-    id_caixa BIGINT REFERENCES caixa(id),
-    id_produto BIGINT REFERENCES caixa_de_agua(id),
+    id SERIAL PRIMARY KEY,
+    id_caixa INT REFERENCES caixa(id),
+    id_produto INT REFERENCES caixa_de_agua(id),
     quantidade INT NOT NULL,
     tipo VARCHAR(30) NOT NULL,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE transacao(
+    id SERIAL PRIMARY KEY,
+    id_caixa INT NOT NULL REFERENCES caixa(id),
+    id_pessoa INT NOT NULL REFERENCES pessoa(id),
+    tipo VARCHAR(30) NOT NULL,
+    dt_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

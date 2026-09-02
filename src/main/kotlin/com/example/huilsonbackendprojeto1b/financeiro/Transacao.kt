@@ -9,12 +9,22 @@ import java.time.LocalDateTime
 import com.example.huilsonbackendprojeto1b.utils.formatacaoDinheiro as format
 
 class Transacao(
+    val id: Long? = null,
+
     val caixa: Caixa,
     val valor : BigDecimal,
     val pessoa : Pessoa,
-    val dataMovimentacao : LocalDateTime = LocalDateTime.now(),
-    val tipoTransacao : TipoTransacao
+    val tipoTransacao : TipoTransacao,
+
+    val dataMovimentacao : LocalDateTime,
 ){
+    fun verificarSaldo(): Boolean{
+        if(tipoTransacao == TipoTransacao.SAIDA && valor > caixa.saldo){
+            println("Saldo insuficiente, faltam ${format(valor-caixa.saldo)} para ser possível a compra")
+        }
+        return true
+    }
+
     fun transacao() : String{
         val valorAnterior = format(caixa.saldo)
         val valorTransacao = valor * tipoTransacao.valor

@@ -1,5 +1,6 @@
 package com.example.huilsonbackendprojeto1b.service
 
+import com.example.huilsonbackendprojeto1b.enumeradores.Cargo
 import com.example.huilsonbackendprojeto1b.pessoas.Funcionario
 import com.example.huilsonbackendprojeto1b.repositorio.JPAFuncionario
 import java.sql.SQLException
@@ -17,6 +18,10 @@ class FuncionarioService {
 
     fun consultarPorStatus(status: String): List<Funcionario> {
         return jpaFuncionario.consultarPorStatus(status)
+    }
+
+    fun consultarPorCargo(cargo: Cargo): List<Funcionario> {
+        return jpaFuncionario.consultarPorCargo(cargo)
     }
 
     fun alterarStatus(id: Long, status: String) {

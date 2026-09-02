@@ -123,6 +123,50 @@ class JPAFuncionario(
         return funcionarios
     }
 
+    fun consultarPorCargo(cargo: Cargo): List<Funcionario> {
+        val funcionarios = mutableListOf<Funcionario>()
+        try {
+            c = JPAConexao().conectar()
+
+            var sql = "SELECT p.id, p.nome, p.cpf, p.email, p.telefone, p.cidade, p.endereco, " +
+                    "p.dt_nasc, p.dt_criacao, f.salario, f.turno, f.cargo, f.status " +
+                    "FROM pessoa p JOIN funcionario f ON p.id = f.id WHERE f.cargo = ?"
+
+            val stmt = c!!.prepareStatement(sql)
+
+            stmt.setString(1, cargo.toString())
+
+
+            val resultado = stmt.executeQuery()
+
+            while (resultado.next()) {
+                val funcionario = Funcionario(
+                    nome = resultado.getString("nome"),
+                    cpf = resultado.getString("cpf"),
+                    email = resultado.getString("email"),
+                    telefone = resultado.getString("telefone"),
+                    cidade = resultado.getString("cidade"),
+                    endereco = resultado.getString("endereco"),
+                    dtNasc = resultado.getDate("dt_nasc").toLocalDate(),
+                    salario = resultado.getBigDecimal("salario"),
+                    turno = Turno.valueOf(resultado.getString("turno")),
+                    cargo = Cargo.valueOf(resultado.getString("cargo")),
+                    status = resultado.getString("status"),
+                )
+                funcionario.id = resultado.getLong("id")
+                funcionario.dtCriacao = resultado.getTimestamp("dt_criacao").toLocalDateTime()
+                funcionarios.add(funcionario)
+            }
+
+            stmt.close()
+        } catch (e: SQLException) {
+            println(e.printStackTrace())
+        } finally {
+            c?.close()
+        }
+        return funcionarios
+    }
+
     fun alterarStatus(id: Long, status: String) {
         try {
             c = JPAConexao().conectar()

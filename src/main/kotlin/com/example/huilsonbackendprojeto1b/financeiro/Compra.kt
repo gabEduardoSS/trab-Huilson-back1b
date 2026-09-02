@@ -9,7 +9,7 @@ class Compra(
     val id: Long? = null,
 
     val valorTotal: BigDecimal,
-    val conferente: Funcionario,
+    val requisitor: Funcionario,
     val valorDesconto: BigDecimal = BigDecimal.ZERO,
     val statusCompra: StatusFinanceiro = StatusFinanceiro.CONCLUIDA,
 

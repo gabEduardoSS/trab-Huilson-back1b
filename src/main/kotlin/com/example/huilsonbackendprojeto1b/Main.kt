@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
     val clienteHandler = ClienteHandler(clienteService)
     val funcionarioHandler = FuncionarioHandler(funcionarioService)
     val vendaHandler = VendaHandler(vendaService)
-    val compraHandler = CompraHandler(compraService)
+    val compraHandler = CompraHandler(compraService, produtoService, funcionarioService)
 
     val handlers = mapOf(
         OpcoesMenu.PRODUTO to produtoHandler,

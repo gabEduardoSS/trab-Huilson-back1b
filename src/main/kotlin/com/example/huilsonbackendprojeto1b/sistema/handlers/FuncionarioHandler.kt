@@ -16,6 +16,7 @@ class FuncionarioHandler(
         "Cadastrar" to { cadastrarFuncionario() },
         "Consultar ativos" to { consultarFuncionariosStatus("ativo")},
         "Consultar desativados" to { consultarFuncionariosStatus("desativado")},
+        "Consultar por Cargo" to {consultarFuncionariosCargo()},
         "Consultar todos" to { consultarFuncionarios() },
         "Alterar" to { alterarFuncionario() },
         "Desativar" to { alterarStatus("desativar") },
@@ -77,7 +78,7 @@ class FuncionarioHandler(
         do {
             val codigo = validarCampoNumerico("Escolha o cargo: ", tipo = 1).toInt()
             if (codigo !in Cargo.entries.indices) {
-                println("Código do turno não existe")
+                println("Código do cargo não existe")
                 continue
             }
             cargo = Cargo.entries[codigo]
@@ -134,9 +135,34 @@ class FuncionarioHandler(
         }
     }
 
+    private fun consultarFuncionariosCargo(){
+        var cargo: Cargo
+        Cargo.entries.forEach { c ->
+            println("${c.ordinal} - ${c.name.replace("_", " ")}")
+        }
+        do {
+            val codigo = validarCampoNumerico("Escolha o cargo: ", tipo = 1).toInt()
+            if (codigo !in Cargo.entries.indices) {
+                println("Código do cargo não existe")
+                continue
+            }
+            cargo = Cargo.entries[codigo]
+            break
+        } while (true)
+
+        val funcionarios = funcionarioService.consultarPorCargo(cargo)
+
+        if (funcionarios.isEmpty()) {
+            println("Não há funcionários com esse cargo")
+        }
+
+        funcionarios.forEach { funcionario ->
+            println(funcionario.valores())
+        }
+    }
+
     private fun alterarFuncionario() {
         val funcionarios = funcionarioService.listarFuncionarios()
-        val IDs = mutableListOf<Long?>()
 
         if (funcionarios.isEmpty()) {
             println("Não há funcionários cadastrados")
@@ -145,14 +171,13 @@ class FuncionarioHandler(
 
         println("----<| Funcionários Cadastrados |>----")
         funcionarios.forEach { funcionario ->
-            IDs.add(funcionario.id)
             println(funcionario.valores())
         }
 
         var idFuncionario: Long
         do {
             idFuncionario = validarCampoNumerico("Insira o ID do funcionário a ser alterado: ", tipo = 1).toLong()
-            if (idFuncionario !in IDs) {
+            if (funcionarios.none{ it.id == idFuncionario }) {
                 println("ID inválido")
                 continue
             }

@@ -1,5 +1,6 @@
 package com.example.huilsonbackendprojeto1b.utils
 
+import com.example.huilsonbackendprojeto1b.repositorio.JPACaixa
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -17,7 +18,7 @@ fun formatacaoDinheiro(valor: BigDecimal): String {
  *  4 - > Endereço(rua, número);
  * */
 fun validarCampoString(msg: String, aceitarBranco: Boolean = false, tipo: Int = 1): String{
-    val validar = if(tipo == 2) """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z.]+$""" else if(tipo == 3) """[A-Za-zÀ-ÿ\s]+,\s*[A-Z]{2}""" else if(tipo == 4) """.+,\s*[A-Za-z0-9]+""" else ""
+    val validar = if(tipo == 2) """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z.]+$""" else if(tipo == 3) """[A-Za-zÀ-ÿ\s]+,\s*[A-Za-z]{2}""" else if(tipo == 4) """.+,\s*[A-Za-z0-9]+""" else ""
     val regex = "^$validar$".toRegex()
     var read: String
     do{
@@ -110,6 +111,9 @@ fun validarCampoNumerico(msg: String, tipo: Int = 2, retornarComPonto: Boolean =
 }
 
 fun main(){
-    val email = validarCampoString("Digite o email: ", tipo = 2, aceitarBranco = true)
-    println(email)
+    val caixa = JPACaixa()
+
+    println(caixa.consultarSaldo())
+    caixa.adicionarSaldo(5000.toBigDecimal())
+    println(caixa.consultarSaldo())
 }

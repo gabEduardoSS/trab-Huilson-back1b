@@ -4,13 +4,9 @@ import com.example.huilsonbackendprojeto1b.utils.formatacaoDinheiro
 import java.math.BigDecimal
 
 class Caixa(
-    var saldo : BigDecimal
-) {
-    fun consultarSaldo(){
-        println("Saldo: ${formatacaoDinheiro(saldo)}")
-    }
+    val id: Long? = null,
 
-    fun consultarMovimentacoes() {
-        println("Movimentações: beta")
-    }
+    var saldo: BigDecimal
+) {
+
 }

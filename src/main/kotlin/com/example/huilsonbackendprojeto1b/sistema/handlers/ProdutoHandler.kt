@@ -124,7 +124,6 @@ class ProdutoHandler(
 
     private fun alterarProduto() {
         val produtos = produtoService.listarProdutos()
-        val IDs = mutableListOf<Long?>()
 
         if (produtos.isEmpty()) {
             println("Não há produtos cadastrados")
@@ -133,14 +132,13 @@ class ProdutoHandler(
 
         println("----<| Produtos cadastrados |>----")
         produtos.forEach { produto ->
-            IDs.add(produto.id)
             println(produto.valores())
         }
 
         var idProduto: Long = 0
         do {
             idProduto = validarCampoNumerico("Insira o ID do produto a ser alterado: ", tipo = 1).toLong()
-            if (idProduto !in IDs) {
+            if (produtos.none{ it.id == idProduto }) {
                 println("ID inválido")
                 continue
             }

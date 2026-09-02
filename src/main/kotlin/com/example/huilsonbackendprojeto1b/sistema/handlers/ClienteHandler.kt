@@ -80,7 +80,6 @@ class ClienteHandler(
 
     private fun alterarCliente(){
         val clientes = clienteService.listarClientes()
-        val IDs = mutableListOf<Long?>()
 
         if(clientes.isEmpty()){
             println("Não há clientes cadastrados")
@@ -89,14 +88,13 @@ class ClienteHandler(
 
         println("----<| Clientes Cadastrados |>----")
         clientes.forEach { cliente ->
-            IDs.add(cliente.id)
             println(cliente.valores())
         }
 
         var idCliente: Long
         do {
             idCliente = validarCampoNumerico("Insira o ID do cliente a ser alterado: ", tipo = 1).toLong()
-            if (idCliente !in IDs) {
+            if (clientes.none{ it.id == idCliente }) {
                 println("ID inválido")
                 continue
             }
