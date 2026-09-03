@@ -151,4 +151,8 @@ class JPAProduto(
             c?.close()
         }
     }
+
+    fun consultarQuantidade(id: Long, con: Connection? = null){
+
+    }
 }

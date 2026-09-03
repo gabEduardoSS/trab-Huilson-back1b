@@ -40,7 +40,6 @@ CREATE TABLE caixa_de_agua (
     status VARCHAR(20) NOT NULL DEFAULT 'ativo',
     quantidade INT NOT NULL,
     quantidade_minima INT,
-    quantidade_maxima INT,
     dt_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -51,25 +50,27 @@ CREATE TABLE caixa(
 
 INSERT INTO caixa(saldo) VALUES (100000);
 
-CREATE TABLE movimentacao(
-    id SERIAL PRIMARY KEY,
-    id_caixa INT REFERENCES caixa(id),
-    id_produto INT REFERENCES caixa_de_agua(id),
-    quantidade INT NOT NULL,
-    tipo VARCHAR(30) NOT NULL,
-    descricao VARCHAR(255),
-    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE transacao(
     id SERIAL PRIMARY KEY,
-    id_caixa INT NOT NULL REFERENCES caixa(id),
-    id_pessoa INT NOT NULL REFERENCES pessoa(id),
+    id_caixa INT NOT NULL REFERENCES caixa(id) NOT NULL,
+    id_pessoa INT NOT NULL REFERENCES pessoa(id) NOT NULL,
     valor NUMERIC(19, 4),
     tipo VARCHAR(30) NOT NULL,
     descricao VARCHAR(255),
     status VARCHAR(30),
     saldo_anterior NUMERIC(19, 4) NOT NULL,
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE movimentacao(
+    id SERIAL PRIMARY KEY,
+    id_transacao INT REFERENCES transacao(id),
+    id_produto INT REFERENCES caixa_de_agua(id) NOT NULL,
+    quantidade INT NOT NULL,
+    tipo VARCHAR(30) NOT NULL,
+    descricao VARCHAR(255),
+    status VARCHAR(30),
+    quantidade_anterior INT NOT NULL,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -96,7 +97,35 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION validar_quantidade_movimentacao()
+    RETURNS TRIGGER AS $$
+DECLARE
+    quantidade_atual DECIMAL;
+BEGIN
+    IF NEW.tipo = 'SAIDA' THEN
+        SELECT quantidade INTO quantidade_atual FROM caixa_de_agua WHERE id = NEW.id_produto;
+        NEW.quantidade_anterior := quantidade_atual;
+        IF quantidade_atual >= NEW.quantidade THEN
+            UPDATE caixa_de_agua SET quantidade = caixa_de_agua.quantidade - NEW.quantidade WHERE id = NEW.id_produto;
+            NEW.status := 'CONCLUIDA';
+        ELSE
+            NEW.status := 'CANCELADA';
+        END IF;
+    ELSE
+        UPDATE caixa_de_agua SET quantidade = quantidade + NEW.quantidade WHERE id = NEW.id_produto;
+        NEW.status := 'CONCLUIDA';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TRIGGER trg_validar_saldo
     BEFORE INSERT ON transacao
     FOR EACH ROW
 EXECUTE FUNCTION validar_saldo_transacao();
+
+CREATE TRIGGER trg_validar_quantidade
+    BEFORE INSERT ON movimentacao
+    FOR EACH ROW
+EXECUTE FUNCTION validar_quantidade_movimentacao();

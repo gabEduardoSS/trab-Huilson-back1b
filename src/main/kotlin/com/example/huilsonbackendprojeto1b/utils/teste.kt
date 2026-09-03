@@ -23,7 +23,7 @@ fun main(){
     val transacao = Transacao(
         valor = BigDecimal("1"),
         pessoa = cliente,
-        tipoTransacao = TipoTransacao.SAIDA,
+        tipoTransacao = TipoTransacao.ENTRADA,
         descricao = "teste2"
     )
     println(transacao.transacao())

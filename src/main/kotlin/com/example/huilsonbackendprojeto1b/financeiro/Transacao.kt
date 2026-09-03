@@ -26,7 +26,7 @@ class Transacao(
         try{
             con = JPAConexao.conectar()
 
-            return JPATransacao.criarTransacao(this, con)
+            return JPATransacao.criarTransacao(this, con)?.get(0)
         } catch(e: SQLException){
             println("ERRO: ${e.stackTrace.joinToString(", ")}")
         } finally {
