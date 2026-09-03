@@ -14,7 +14,7 @@ class JPAProduto(
     fun salvar(a: CaixaDeAgua): CaixaDeAgua {
         println("Salvando...")
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             val sql = "INSERT INTO caixa_de_agua " +
                     "(marca, modelo, dimensao, cor, material, formato, fornecedor, preco, quantidade, status) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)"
@@ -60,7 +60,7 @@ class JPAProduto(
     private fun listarComFiltroDeStatus(status: String?): List<CaixaDeAgua> {
         val produtos = mutableListOf<CaixaDeAgua>()
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
 
             var sql = "SELECT * FROM caixa_de_agua"
             if (status != null) {
@@ -106,7 +106,7 @@ class JPAProduto(
 
     fun editar(caixa: CaixaDeAgua, id: Long): CaixaDeAgua {
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
 
             val sql = "UPDATE caixa_de_agua SET marca = ?, modelo = ?, dimensao = ?, cor = ?, " +
                     "material = ?, formato = ?, fornecedor = ?, preco = ?, quantidade = 0 WHERE id = ?"
@@ -138,7 +138,7 @@ class JPAProduto(
 
     fun alterarCampo(id: Long, campo: String, valor: String) {
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             val sql = "UPDATE caixa_de_agua SET $campo = ? WHERE id = ?"
             val stmt = c!!.prepareStatement(sql)
             stmt.setString(1, valor)

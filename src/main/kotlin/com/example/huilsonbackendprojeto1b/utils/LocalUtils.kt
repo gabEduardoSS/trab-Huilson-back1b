@@ -1,6 +1,5 @@
 package com.example.huilsonbackendprojeto1b.utils
 
-import com.example.huilsonbackendprojeto1b.repositorio.JPACaixa
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -108,12 +107,4 @@ fun validarCampoNumerico(msg: String, tipo: Int = 2, retornarComPonto: Boolean =
     }
 
     return retornoVal
-}
-
-fun main(){
-    val caixa = JPACaixa()
-
-    println(caixa.consultarSaldo())
-    caixa.adicionarSaldo(5000.toBigDecimal())
-    println(caixa.consultarSaldo())
 }

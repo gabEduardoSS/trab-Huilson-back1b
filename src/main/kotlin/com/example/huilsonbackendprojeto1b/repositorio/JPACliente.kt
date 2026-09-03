@@ -14,7 +14,7 @@ class JPACliente(
     fun salvar(cliente: Cliente): Cliente {
         println("Salvando...")
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             c!!.autoCommit = false
 
             val sqlPessoa = "INSERT INTO pessoa " +
@@ -63,7 +63,7 @@ class JPACliente(
     fun listar(): List<Cliente> {
         val clientes = mutableListOf<Cliente>()
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             val stmt = c!!.createStatement()
 
             val sql = "SELECT p.id, p.nome, p.cpf, p.email, p.telefone, p.cidade, p.endereco, " +
@@ -99,7 +99,7 @@ class JPACliente(
 
     fun editar(clienteAtualizado: Cliente, id: Long): Cliente {
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             c!!.autoCommit = false
 
             val sqlPessoa = "UPDATE pessoa SET nome = ?, cpf = ?, email = ?, telefone = ?, " +

@@ -1,4 +1,5 @@
-DROP TABLE cliente, funcionario, pessoa, caixa_de_agua, caixa, movimentacao, transacao;
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 CREATE TABLE pessoa (
     id SERIAL PRIMARY KEY,
@@ -56,6 +57,7 @@ CREATE TABLE movimentacao(
     id_produto INT REFERENCES caixa_de_agua(id),
     quantidade INT NOT NULL,
     tipo VARCHAR(30) NOT NULL,
+    descricao VARCHAR(255),
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -63,6 +65,8 @@ CREATE TABLE transacao(
     id SERIAL PRIMARY KEY,
     id_caixa INT NOT NULL REFERENCES caixa(id),
     id_pessoa INT NOT NULL REFERENCES pessoa(id),
+    valor NUMERIC(19, 4),
     tipo VARCHAR(30) NOT NULL,
-    dt_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    descricao VARCHAR(255),
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

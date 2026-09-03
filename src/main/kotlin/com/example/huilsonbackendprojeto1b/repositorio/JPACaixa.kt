@@ -5,13 +5,11 @@ import java.math.BigDecimal
 import java.sql.Connection
 import java.sql.SQLException
 
-class JPACaixa(
-    var c: Connection? = null
-) {
+object JPACaixa{
     fun consultarSaldo(con: Connection? = null): BigDecimal? {
         var conexaoInterna: Connection? = null
         try{
-            conexaoInterna = con ?: JPAConexao().conectar()
+            conexaoInterna = con ?: JPAConexao.conectar()
 
             val stmt = conexaoInterna!!.createStatement()
             val sql = "SELECT saldo FROM caixa WHERE id = 1"
@@ -37,19 +35,23 @@ class JPACaixa(
         }
     }
 
-    fun adicionarSaldo(valor: BigDecimal){
+    fun adicionarSaldo(valor: BigDecimal, con: Connection? = null){
+        var conexaoInterna: Connection? = null
         try{
-            c = JPAConexao().conectar()
+            conexaoInterna = con ?: JPAConexao.conectar()
 
-            val saldo = consultarSaldo(c)
+            val saldo = consultarSaldo(conexaoInterna)
             if(saldo == null){
                 println("Erro ao consultar o saldo, valor não foi adicionado")
                 return
+            } else if(valor < BigDecimal.ZERO && valor > saldo){
+                println("Saldo de saída maior que o saldo atual, cancelando operação")
+                return
             }
 
-            val sql = "UPDATE caixa SET saldo = ? WHERE id = 1"
-            val stmt = c!!.prepareStatement(sql)
-            stmt.setBigDecimal(1, saldo+valor)
+            val sql = "UPDATE caixa SET saldo = saldo + ? WHERE id = 1"
+            val stmt = conexaoInterna!!.prepareStatement(sql)
+            stmt.setBigDecimal(1, valor)
             stmt.executeUpdate()
             println("Valor de ${formatacaoDinheiro(valor)} adicionado. Saldo disponível em caixa: ${formatacaoDinheiro(saldo+valor)}")
             stmt.close()
@@ -57,7 +59,9 @@ class JPACaixa(
         } catch (e: SQLException) {
             println("ERRO: ${e.stackTrace.joinToString(", ")}")
         } finally {
-            c!!.close()
+            if (con == null) {
+                conexaoInterna?.close()
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ open class Movimentacao(
             return
         }
         try{
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             c!!.autoCommit = false
 
             val sqlMovimentacao = "INSERT INTO movimentacao (id_caixa, id_produto, quantidade, tipo) VALUES (1, ?, ?, ?)"

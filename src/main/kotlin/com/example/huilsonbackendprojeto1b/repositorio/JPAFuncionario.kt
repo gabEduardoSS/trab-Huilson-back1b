@@ -18,7 +18,7 @@ class JPAFuncionario(
     fun salvar(funcionario: Funcionario): Funcionario {
         println("Salvando...")
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             c!!.autoCommit = false
 
             val sqlPessoa = "INSERT INTO pessoa " +
@@ -79,7 +79,7 @@ class JPAFuncionario(
     private fun listarComFiltroDeStatus(status: String?): List<Funcionario> {
         val funcionarios = mutableListOf<Funcionario>()
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
 
             var sql = "SELECT p.id, p.nome, p.cpf, p.email, p.telefone, p.cidade, p.endereco, " +
                     "p.dt_nasc, p.dt_criacao, f.salario, f.turno, f.cargo, f.status " +
@@ -126,7 +126,7 @@ class JPAFuncionario(
     fun consultarPorCargo(cargo: Cargo): List<Funcionario> {
         val funcionarios = mutableListOf<Funcionario>()
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
 
             var sql = "SELECT p.id, p.nome, p.cpf, p.email, p.telefone, p.cidade, p.endereco, " +
                     "p.dt_nasc, p.dt_criacao, f.salario, f.turno, f.cargo, f.status " +
@@ -169,7 +169,7 @@ class JPAFuncionario(
 
     fun alterarStatus(id: Long, status: String) {
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             val sql = "UPDATE funcionario SET status = ? WHERE id = ?"
             val stmt = c!!.prepareStatement(sql)
             stmt.setString(1, status)
@@ -185,7 +185,7 @@ class JPAFuncionario(
 
     fun editar(funcionarioAtualizado: Funcionario, id: Long): Funcionario {
         try {
-            c = JPAConexao().conectar()
+            c = JPAConexao.conectar()
             c!!.autoCommit = false
 
             val sqlPessoa = "UPDATE pessoa SET nome = ?, cpf = ?, email = ?, telefone = ?, " +
