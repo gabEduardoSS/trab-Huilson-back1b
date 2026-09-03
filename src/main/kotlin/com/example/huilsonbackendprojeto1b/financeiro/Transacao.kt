@@ -17,21 +17,21 @@ class Transacao(
     val pessoa : Pessoa,
     val tipoTransacao : TipoTransacao,
     val descricao: String?,
+    val status: String? = null,
 
     val dataMovimentacao : LocalDateTime? = null,
 ){
-    fun transacao(){
+    fun transacao(): String?{
         var con: Connection? = null
         try{
             con = JPAConexao.conectar()
 
-            JPATransacao.criarTransacao(this, con)
-            JPACaixa.adicionarSaldo(valor * tipoTransacao.valor, con)
-
+            return JPATransacao.criarTransacao(this, con)
         } catch(e: SQLException){
             println("ERRO: ${e.stackTrace.joinToString(", ")}")
         } finally {
             con?.close()
         }
+        return null
     }
 }

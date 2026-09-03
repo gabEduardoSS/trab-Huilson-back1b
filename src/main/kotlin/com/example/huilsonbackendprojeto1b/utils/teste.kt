@@ -3,7 +3,6 @@ package com.example.huilsonbackendprojeto1b.utils
 import com.example.huilsonbackendprojeto1b.enumeradores.TipoTransacao
 import com.example.huilsonbackendprojeto1b.financeiro.Transacao
 import com.example.huilsonbackendprojeto1b.pessoas.Cliente
-import com.example.huilsonbackendprojeto1b.pessoas.Pessoa
 import com.example.huilsonbackendprojeto1b.repositorio.JPACaixa
 import com.example.huilsonbackendprojeto1b.repositorio.JPAConexao
 import com.example.huilsonbackendprojeto1b.service.ClienteService
@@ -22,11 +21,11 @@ fun main(){
 
     println(JPACaixa.consultarSaldo(con))
     val transacao = Transacao(
-        valor = BigDecimal("115000"),
+        valor = BigDecimal("1"),
         pessoa = cliente,
         tipoTransacao = TipoTransacao.SAIDA,
         descricao = "teste2"
     )
-    transacao.transacao()
+    println(transacao.transacao())
     println(JPACaixa.consultarSaldo(con))
 }

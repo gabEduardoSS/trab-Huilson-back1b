@@ -68,5 +68,35 @@ CREATE TABLE transacao(
     valor NUMERIC(19, 4),
     tipo VARCHAR(30) NOT NULL,
     descricao VARCHAR(255),
+    status VARCHAR(30),
+    saldo_anterior NUMERIC(19, 4) NOT NULL,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE OR REPLACE FUNCTION validar_saldo_transacao()
+    RETURNS TRIGGER AS $$
+DECLARE
+    saldo_atual DECIMAL;
+BEGIN
+    IF NEW.tipo = 'SAIDA' THEN
+        SELECT saldo INTO saldo_atual FROM caixa WHERE id = 1;
+        NEW.saldo_anterior := saldo_atual;
+        IF saldo_atual >= NEW.valor THEN
+            UPDATE caixa SET saldo = saldo - NEW.valor WHERE id = 1;
+            NEW.status := 'CONCLUIDA';
+        ELSE
+            NEW.status := 'CANCELADA';
+        END IF;
+    ELSE
+        UPDATE caixa SET saldo = saldo + NEW.valor WHERE id = 1;
+        NEW.status := 'CONCLUIDA';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_validar_saldo
+    BEFORE INSERT ON transacao
+    FOR EACH ROW
+EXECUTE FUNCTION validar_saldo_transacao();
