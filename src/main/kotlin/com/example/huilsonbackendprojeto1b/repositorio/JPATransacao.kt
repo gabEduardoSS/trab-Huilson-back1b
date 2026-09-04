@@ -5,9 +5,9 @@ import java.sql.Connection
 import java.sql.SQLException
 
 object JPATransacao {
-    fun criarTransacao(transacao: Transacao, con: Connection? = null): List<String>? {
+    fun criarTransacao(transacao: Transacao, con: Connection? = null): Map<String, Any>? {
         try {
-            val sqlInsert = "INSERT INTO transacao(valor, id_caixa, id_pessoa, tipo, descricao, status) VALUES(?, 1, ?, ?, ?, 'PENDENTE') RETURNING status"
+            val sqlInsert = "INSERT INTO transacao(valor, id_caixa, id_pessoa, tipo, descricao, status) VALUES(?, 1, ?, ?, ?, 'PENDENTE') RETURNING status, data, saldo_anterior, saldo_posterior"
             val stmtInsert = con!!.prepareStatement(sqlInsert)
             stmtInsert.setBigDecimal(1, transacao.valor)
             stmtInsert.setLong(2, transacao.pessoa.id!!)
@@ -17,13 +17,16 @@ object JPATransacao {
             val rs = stmtInsert.executeQuery()
             rs.next()
 
-            println(rs)
-            val retorno: List<String> = listOf(rs.getString("status"))
+            val retorno: Map<String, Any> = mapOf(
+                "saldo_anterior" to rs.getBigDecimal("saldo_anterior"),
+                "saldo_posterior" to rs.getBigDecimal("saldo_posterior"),
+                "status" to rs.getString("status"),
+                "data" to rs.getTimestamp("data").toLocalDateTime())
             stmtInsert.close()
 
             return retorno
         } catch (e: SQLException) {
-            println("ERRO: ${e.stackTrace.joinToString(", ")}")
+            println("ERRO: ${e.stackTrace.joinToString(", ")}, ${e.message}")
         }
         return null
     }

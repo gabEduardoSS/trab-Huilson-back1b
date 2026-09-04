@@ -1,38 +1,53 @@
 package com.example.huilsonbackendprojeto1b.produto
 
 import com.example.huilsonbackendprojeto1b.enumeradores.TipoMovimentacao
-import com.example.huilsonbackendprojeto1b.financeiro.Transacao
 import com.example.huilsonbackendprojeto1b.repositorio.JPAConexao
+import com.example.huilsonbackendprojeto1b.repositorio.JPAMovimentacao
 import java.sql.Connection
 import java.sql.SQLException
+import java.time.LocalDateTime
 
 open class Movimentacao(
     val id: Long? = null,
 
-    val transacao: Transacao? = null,
     val produto: CaixaDeAgua,
     val quantidade: Int,
     val descricao: String? = null,
     val tipo: TipoMovimentacao
 ){
-    fun movimentar(): String?{
-        if(tipo == TipoMovimentacao.ENTRADA && descricao == null){ return "ERRO: Entrada sem transação associada"}
+    var quantidadeAnterior: Int? = null
+    var quantidadePosterior: Int? = null
+    var status: String? = null
+    var dataMovimentacao: LocalDateTime? = null
 
-        var c: Connection? = null
+    fun movimentacao(){
+        var con: Connection? = null
         try{
-            c = JPAConexao.conectar()
+            con = JPAConexao.conectar()
 
+            val retorno = JPAMovimentacao.criarMovimentacao(this, con)
 
-            println("Produto movimentado: quantidade ${produto.quantidade} -> $quantidade")
+            quantidadeAnterior = retorno?.getValue("quantidade_anterior") as Int?
+            quantidadePosterior = retorno?.getValue("quantidade_posterior") as Int?
+            status = retorno?.getValue("status") as String?
+            dataMovimentacao = retorno?.getValue("data") as LocalDateTime?
         } catch(e: SQLException){
-            println("Erro: ${e.printStackTrace()}")
-            try {
-                c?.rollback()
-            } catch (ignored: SQLException) {
-            }
+            println("ERRO: ${e.stackTrace.joinToString(", ")}")
         } finally {
-            c?.close()
+            con?.close()
         }
-        return null
+    }
+
+    fun valores(){
+        print("""
+            Quantidade: ${quantidade},
+            ID do Produto: ${produto.id},
+            Tipo: ${tipo.name},
+            Descricao: ${descricao},
+            Quantidade Anterior: ${quantidadeAnterior},
+            Quantidade Posterior: ${quantidadePosterior},
+            Status: ${status},
+            Data: $dataMovimentacao
+        """.trimIndent())
     }
 }

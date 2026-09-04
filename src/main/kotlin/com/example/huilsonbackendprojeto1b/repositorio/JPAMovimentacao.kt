@@ -6,21 +6,26 @@ import java.sql.Connection
 import java.sql.SQLException
 
 object JPAMovimentacao {
-    fun criarMovimentacao(movimentacao: Movimentacao, con: Connection? = null): String? {
+    fun criarMovimentacao(movimentacao: Movimentacao, con: Connection? = null): Map<String, Any>? {
         try {
-            val sqlInsert = "INSERT INTO movimentacao(id_transacao, id_produto, quantidade, tipo, descricao, status) VALUES(?, ?, ?, ?, ?, 'PENDENTE') RETURNING status"
+            val sqlInsert = "INSERT INTO movimentacao(id_produto, quantidade, tipo, descricao, status) VALUES(?, ?, ?, ?, 'PENDENTE') RETURNING status, data, quantidade_anterior, quantidade_posterior"
             val stmtInsert = con!!.prepareStatement(sqlInsert)
-            stmtInsert.setObject(1, movimentacao.transacao?.id)
-            stmtInsert.setLong(2, movimentacao.produto.id!!)
-            stmtInsert.setInt(3, movimentacao.quantidade)
-            stmtInsert.setString(4, movimentacao.tipo.name)
-            stmtInsert.setString(5, movimentacao.descricao)
-            val retorno = stmtInsert.executeQuery()
-            retorno.next()
-            val status = retorno.getString("status")
+            stmtInsert.setLong(1, movimentacao.produto.id!!)
+            stmtInsert.setInt(2, movimentacao.quantidade)
+            stmtInsert.setString(3, movimentacao.tipo.name)
+            stmtInsert.setString(4, movimentacao.descricao)
+
+            val rs = stmtInsert.executeQuery()
+            rs.next()
+
+            val retorno: Map<String, Any> = mapOf(
+                "quantidade_anterior" to rs.getInt("quantidade_anterior"),
+                "quantidade_posterior" to rs.getInt("quantidade_posterior"),
+                "status" to rs.getString("status"),
+                "data" to rs.getTimestamp("data").toLocalDateTime())
             stmtInsert.close()
 
-            return status
+            return retorno
         } catch (e: SQLException) {
             println("ERRO: ${e.stackTrace.joinToString(", ")}")
         }

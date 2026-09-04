@@ -59,18 +59,19 @@ CREATE TABLE transacao(
     descricao VARCHAR(255),
     status VARCHAR(30),
     saldo_anterior NUMERIC(19, 4) NOT NULL,
+    saldo_posterior NUMERIC(19, 4) NOT NULL,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE movimentacao(
     id SERIAL PRIMARY KEY,
-    id_transacao INT REFERENCES transacao(id),
     id_produto INT REFERENCES caixa_de_agua(id) NOT NULL,
     quantidade INT NOT NULL,
     tipo VARCHAR(30) NOT NULL,
     descricao VARCHAR(255),
     status VARCHAR(30),
     quantidade_anterior INT NOT NULL,
+    quantidade_posterior INT NOT NULL,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -78,10 +79,11 @@ CREATE OR REPLACE FUNCTION validar_saldo_transacao()
     RETURNS TRIGGER AS $$
 DECLARE
     saldo_atual DECIMAL;
+    saldo_novo DECIMAL;
 BEGIN
+    SELECT saldo INTO saldo_atual FROM caixa WHERE id = 1;
+    NEW.saldo_anterior := saldo_atual;
     IF NEW.tipo = 'SAIDA' THEN
-        SELECT saldo INTO saldo_atual FROM caixa WHERE id = 1;
-        NEW.saldo_anterior := saldo_atual;
         IF saldo_atual >= NEW.valor THEN
             UPDATE caixa SET saldo = saldo - NEW.valor WHERE id = 1;
             NEW.status := 'CONCLUIDA';
@@ -92,7 +94,8 @@ BEGIN
         UPDATE caixa SET saldo = saldo + NEW.valor WHERE id = 1;
         NEW.status := 'CONCLUIDA';
     END IF;
-
+    SELECT saldo INTO saldo_novo FROM caixa WHERE id = 1;
+    NEW.saldo_posterior := saldo_novo;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -100,11 +103,12 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION validar_quantidade_movimentacao()
     RETURNS TRIGGER AS $$
 DECLARE
-    quantidade_atual DECIMAL;
+    quantidade_atual INT;
+    quantidade_nova INT;
 BEGIN
+    SELECT quantidade INTO quantidade_atual FROM caixa_de_agua WHERE id = NEW.id_produto;
+    NEW.quantidade_anterior := quantidade_atual;
     IF NEW.tipo = 'SAIDA' THEN
-        SELECT quantidade INTO quantidade_atual FROM caixa_de_agua WHERE id = NEW.id_produto;
-        NEW.quantidade_anterior := quantidade_atual;
         IF quantidade_atual >= NEW.quantidade THEN
             UPDATE caixa_de_agua SET quantidade = caixa_de_agua.quantidade - NEW.quantidade WHERE id = NEW.id_produto;
             NEW.status := 'CONCLUIDA';
@@ -115,7 +119,8 @@ BEGIN
         UPDATE caixa_de_agua SET quantidade = quantidade + NEW.quantidade WHERE id = NEW.id_produto;
         NEW.status := 'CONCLUIDA';
     END IF;
-
+    SELECT quantidade INTO quantidade_nova FROM caixa_de_agua WHERE id = NEW.id_produto;
+    NEW.quantidade_posterior := quantidade_nova;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

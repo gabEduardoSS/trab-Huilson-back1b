@@ -316,6 +316,6 @@ class ProdutoHandler(
             tipo = TipoMovimentacao.ENTRADA
         )
 
-        movimentacao.movimentar()
+        //movimentacao.movimentar()
     }
 }

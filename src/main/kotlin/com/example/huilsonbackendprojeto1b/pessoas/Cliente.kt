@@ -7,12 +7,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class Cliente(
-    nome: String = "",
-    cpf: String = "",
-    email: String = "",
-    telefone: String = "",
-    cidade: String = "",
-    endereco: String = "",
+    nome: String,
+    cpf: String,
+    email: String,
+    telefone: String,
+    cidade: String,
+    endereco: String,
     dtNasc: LocalDate? = null,
     var dividasAbertas: Boolean = false,
 ) : Pessoa(
