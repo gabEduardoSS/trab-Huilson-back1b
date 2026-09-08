@@ -1,7 +1,6 @@
 package com.example.huilsonbackendprojeto1b.repositorio
 
-import com.example.huilsonbackendprojeto1b.financeiro.Transacao
-import com.example.huilsonbackendprojeto1b.produto.Movimentacao
+import com.example.huilsonbackendprojeto1b.logistica.Movimentacao
 import java.sql.Connection
 import java.sql.SQLException
 

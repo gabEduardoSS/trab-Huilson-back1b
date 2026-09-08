@@ -5,7 +5,7 @@ import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
 import com.example.huilsonbackendprojeto1b.enumeradores.TipoMovimentacao
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
-import com.example.huilsonbackendprojeto1b.produto.Movimentacao
+import com.example.huilsonbackendprojeto1b.logistica.Movimentacao
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import com.example.huilsonbackendprojeto1b.utils.validarCampoString
 import com.example.huilsonbackendprojeto1b.utils.validarCampoNumerico
@@ -21,10 +21,9 @@ class ProdutoHandler(
         "Alterar" to { alterarProduto() },
         "Desativar" to { alterarStatus("desativar") },
         "Reativar" to { alterarStatus("ativar") },
-        "Recebimento" to { recebimento() }
     )
 
-    private fun cadastrarProduto() {
+    fun cadastrarProduto() {
         val marca = validarCampoString("Digite a marca: ")
 
         val modelo = validarCampoString("Digite o modelo: ")
@@ -280,42 +279,5 @@ class ProdutoHandler(
         } while (true)
 
         produtoService.alterarStatus(idProduto, status)
-    }
-
-    private fun recebimento(){
-        val produtos = produtoService.listarProdutos()
-        val IDs: MutableList<Pair<Int, Long?>> = mutableListOf()
-
-        if (produtos.isEmpty()) {
-            print("Não há produtos cadastrados")
-            return
-        }
-
-        println("----<| Produtos |>----")
-        produtos.forEachIndexed { idx, produto ->
-            IDs.add(idx to produto.id)
-            println(produto.valores())
-        }
-
-        var idProduto: Long = 0
-        do {
-            print("Insira o ID do produto recebido: ")
-            idProduto = readln().toLong()
-            if (!IDs.any{it.second == idProduto}) {
-                println("ID inválido")
-                continue
-            }
-            break
-        } while (true)
-
-        val quantidade = validarCampoNumerico("Digite a quantidade recebida: ", tipo = 1).toInt()
-
-        val movimentacao = Movimentacao(
-            produto = produtos[IDs.find { it.second == idProduto  }!!.first],
-            quantidade = quantidade,
-            tipo = TipoMovimentacao.ENTRADA
-        )
-
-        //movimentacao.movimentar()
     }
 }

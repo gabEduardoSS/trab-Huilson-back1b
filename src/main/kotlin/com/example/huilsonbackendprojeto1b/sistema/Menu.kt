@@ -42,7 +42,8 @@ fun mainMenu(handlers: Map<OpcoesMenu, OpcoesHandler>) {
             do{
                 print("Insira a opção: ")
                 subOpcao = readln().toInt()
-                if(opcao !in 0..<opcoesHandler.size){
+                if(subOpcao !in 0..opcoesHandler.size){
+                    println(opcoesHandler.size)
                     println("Opção inválida")
                     continue
                 }

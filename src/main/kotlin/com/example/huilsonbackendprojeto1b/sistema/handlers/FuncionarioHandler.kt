@@ -23,7 +23,7 @@ class FuncionarioHandler(
         "Reativar" to { alterarStatus("ativar") }
     )
 
-    private fun cadastrarFuncionario() {
+    fun cadastrarFuncionario() {
         println("----<| Cadastrar Funcionário |>----")
         val nome = validarCampoString("Digite o nome do funcionário: ")
 

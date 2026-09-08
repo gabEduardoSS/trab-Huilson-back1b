@@ -16,7 +16,6 @@ class Transacao(
     val valor : BigDecimal,
     val pessoa : Pessoa,
     val tipoTransacao : TipoTransacao,
-    val descricao: String?,
 ){
     var saldoAnterior: BigDecimal? = null
     var saldoPosterior: BigDecimal? = null
@@ -47,7 +46,6 @@ class Transacao(
             Valor: ${formatacaoDinheiro(valor)},
             ID da Pessoa: ${pessoa.id},
             Tipo: ${tipoTransacao.name},
-            Descricao: ${descricao},
             Saldo Anterior: ${saldoAnterior},
             Saldo Posterior: ${saldoPosterior},
             Status: ${status},

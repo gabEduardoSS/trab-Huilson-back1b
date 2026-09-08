@@ -56,7 +56,6 @@ CREATE TABLE transacao(
     id_pessoa INT NOT NULL REFERENCES pessoa(id) NOT NULL,
     valor NUMERIC(19, 4),
     tipo VARCHAR(30) NOT NULL,
-    descricao VARCHAR(255),
     status VARCHAR(30),
     saldo_anterior NUMERIC(19, 4) NOT NULL,
     saldo_posterior NUMERIC(19, 4) NOT NULL,
@@ -72,6 +71,17 @@ CREATE TABLE movimentacao(
     status VARCHAR(30),
     quantidade_anterior INT NOT NULL,
     quantidade_posterior INT NOT NULL,
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE compra(
+    id SERIAL PRIMARY KEY,
+    id_movimentacao INT REFERENCES movimentacao(id) NOT NULL,
+    id_transacao INT REFERENCES transacao(id) NOT NULL,
+    id_funcionario INT REFERENCES funcionario(id) NOT NULL,
+    valor_total NUMERIC(19, 4) NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
