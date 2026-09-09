@@ -78,8 +78,13 @@ fun validarCampoNumerico(msg: String, tipo: Int = 2, retornarComPonto: Boolean =
     do{
         read = validarCampoString(msg, aceitarBranco).replace(" ", "")
 
-        if(aceitarBranco && read.isBlank()){
-            return nonIntProof
+        if(read.isBlank()){
+            if(aceitarBranco){
+                return nonIntProof
+            } else{
+                println("Campo não aceita valores em branco")
+                continue
+            }
         }
 
         if(!regex.matches(read)){

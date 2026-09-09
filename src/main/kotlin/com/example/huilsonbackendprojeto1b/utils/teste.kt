@@ -8,26 +8,5 @@ import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import java.sql.Connection
 
 fun main(){
-    val con: Connection? = JPAConexao.conectar()
-
-    val produtos = ProdutoService().listarProdutos()
-
-    produtos.forEach { produto ->
-        println(produto.valores())
-    }
-
-    val produto: CaixaDeAgua = produtos.first{ it.id == readln().toLong()}
-
-    val movimentacao = Movimentacao(
-        produto = produto,
-        quantidade = 20,
-        descricao = "teste",
-        tipo = TipoMovimentacao.SAIDA
-    )
-
-    movimentacao.movimentacao()
-
-    movimentacao.valores()
-
-    con?.close()
+    val teste = validarCampoNumerico("Teste: ", tipo = 1, aceitarBranco = true).toInt()
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException
 object JPAMovimentacao {
     fun criarMovimentacao(movimentacao: Movimentacao, con: Connection? = null): Map<String, Any>? {
         try {
-            val sqlInsert = "INSERT INTO movimentacao(id_produto, quantidade, tipo, descricao, status) VALUES(?, ?, ?, ?, 'PENDENTE') RETURNING status, data, quantidade_anterior, quantidade_posterior"
+            val sqlInsert = "INSERT INTO movimentacao(id_produto, quantidade, tipo, descricao, status) VALUES(?, ?, ?, ?, 'PENDENTE') RETURNING id, status, data, quantidade_anterior, quantidade_posterior"
             val stmtInsert = con!!.prepareStatement(sqlInsert)
             stmtInsert.setLong(1, movimentacao.produto.id!!)
             stmtInsert.setInt(2, movimentacao.quantidade)
@@ -18,6 +18,7 @@ object JPAMovimentacao {
             rs.next()
 
             val retorno: Map<String, Any> = mapOf(
+                "id" to rs.getInt("id"),
                 "quantidade_anterior" to rs.getInt("quantidade_anterior"),
                 "quantidade_posterior" to rs.getInt("quantidade_posterior"),
                 "status" to rs.getString("status"),

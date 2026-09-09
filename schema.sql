@@ -76,13 +76,21 @@ CREATE TABLE movimentacao(
 
 CREATE TABLE compra(
     id SERIAL PRIMARY KEY,
-    id_movimentacao INT REFERENCES movimentacao(id) NOT NULL,
     id_transacao INT REFERENCES transacao(id) NOT NULL,
     id_funcionario INT REFERENCES funcionario(id) NOT NULL,
     valor_total NUMERIC(19, 4) NOT NULL,
     status VARCHAR(30) NOT NULL,
-    descricao VARCHAR(255) NOT NULL,
+    descricao VARCHAR(255),
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE item_compra(
+    id SERIAL PRIMARY KEY,
+    id_compra INT REFERENCES compra(id) NOT NULL,
+    id_produto INT REFERENCES caixa_de_agua(id) NOT NULL,
+    id_movimentacao INT REFERENCES movimentacao(id) NOT NULL,
+    preco_unitario NUMERIC(19, 4) NOT NULL,
+    quantidade INT NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION validar_saldo_transacao()
@@ -98,7 +106,7 @@ BEGIN
             UPDATE caixa SET saldo = saldo - NEW.valor WHERE id = 1;
             NEW.status := 'CONCLUIDA';
         ELSE
-            NEW.status := 'CANCELADA';
+            NEW.status := 'CANCELADA(saldo)';
         END IF;
     ELSE
         UPDATE caixa SET saldo = saldo + NEW.valor WHERE id = 1;
@@ -123,7 +131,7 @@ BEGIN
             UPDATE caixa_de_agua SET quantidade = caixa_de_agua.quantidade - NEW.quantidade WHERE id = NEW.id_produto;
             NEW.status := 'CONCLUIDA';
         ELSE
-            NEW.status := 'CANCELADA';
+            NEW.status := 'CANCELADA(quantidade)';
         END IF;
     ELSE
         UPDATE caixa_de_agua SET quantidade = quantidade + NEW.quantidade WHERE id = NEW.id_produto;

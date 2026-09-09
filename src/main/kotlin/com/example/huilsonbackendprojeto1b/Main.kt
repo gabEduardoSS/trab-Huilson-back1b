@@ -6,6 +6,7 @@ import com.example.huilsonbackendprojeto1b.service.CompraService
 import com.example.huilsonbackendprojeto1b.service.FuncionarioService
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import com.example.huilsonbackendprojeto1b.service.VendaService
+import com.example.huilsonbackendprojeto1b.sistema.handlers.CaixaHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.ClienteHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.CompraHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.FuncionarioHandler
@@ -25,6 +26,7 @@ fun main(args: Array<String>) {
     val funcionarioHandler = FuncionarioHandler(funcionarioService)
     val vendaHandler = VendaHandler(vendaService)
     val compraHandler = CompraHandler(compraService, produtoService, funcionarioService)
+    val caixaHandler = CaixaHandler()
 
     val handlers = mapOf(
         OpcoesMenu.PRODUTO to produtoHandler,
@@ -32,6 +34,7 @@ fun main(args: Array<String>) {
         OpcoesMenu.FUNCIONARIO to funcionarioHandler,
         OpcoesMenu.VENDA to vendaHandler,
         OpcoesMenu.COMPRA to compraHandler,
+        OpcoesMenu.CAIXA to caixaHandler,
     )
 
     mainMenu(handlers)

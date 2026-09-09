@@ -6,5 +6,6 @@ enum class OpcoesMenu() {
     FUNCIONARIO,
     PRODUTO,
     VENDA,
-    COMPRA
+    COMPRA,
+    CAIXA
 }

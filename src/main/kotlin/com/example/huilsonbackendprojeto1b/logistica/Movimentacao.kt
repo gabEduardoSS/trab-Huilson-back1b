@@ -9,7 +9,7 @@ import java.sql.SQLException
 import java.time.LocalDateTime
 
 open class Movimentacao(
-    val id: Long? = null,
+    var id: Long? = null,
 
     val produto: CaixaDeAgua,
     val quantidade: Int,
@@ -28,6 +28,7 @@ open class Movimentacao(
 
             val retorno = JPAMovimentacao.criarMovimentacao(this, con)
 
+            id = (retorno?.getValue("id") as Int?)?.toLong()
             quantidadeAnterior = retorno?.getValue("quantidade_anterior") as Int?
             quantidadePosterior = retorno?.getValue("quantidade_posterior") as Int?
             status = retorno?.getValue("status") as String?

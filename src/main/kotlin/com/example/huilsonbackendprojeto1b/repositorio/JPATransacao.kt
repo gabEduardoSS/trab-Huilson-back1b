@@ -7,7 +7,7 @@ import java.sql.SQLException
 object JPATransacao {
     fun criarTransacao(transacao: Transacao, con: Connection? = null): Map<String, Any>? {
         try {
-            val sqlInsert = "INSERT INTO transacao(valor, id_caixa, id_pessoa, tipo, status) VALUES(?, 1, ?, ?, 'PENDENTE') RETURNING status, data, saldo_anterior, saldo_posterior"
+            val sqlInsert = "INSERT INTO transacao(valor, id_caixa, id_pessoa, tipo, status) VALUES(?, 1, ?, ?, 'PENDENTE') RETURNING id, status, data, saldo_anterior, saldo_posterior"
             val stmtInsert = con!!.prepareStatement(sqlInsert)
             stmtInsert.setBigDecimal(1, transacao.valor)
             stmtInsert.setLong(2, transacao.pessoa.id!!)
@@ -17,6 +17,7 @@ object JPATransacao {
             rs.next()
 
             val retorno: Map<String, Any> = mapOf(
+                "id" to rs.getInt("id"),
                 "saldo_anterior" to rs.getBigDecimal("saldo_anterior"),
                 "saldo_posterior" to rs.getBigDecimal("saldo_posterior"),
                 "status" to rs.getString("status"),

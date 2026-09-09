@@ -11,7 +11,7 @@ import java.sql.SQLException
 import java.time.LocalDateTime
 
 class Transacao(
-    val id: Long? = null,
+    var id: Long? = null,
 
     val valor : BigDecimal,
     val pessoa : Pessoa,
@@ -30,6 +30,7 @@ class Transacao(
 
             val retorno = JPATransacao.criarTransacao(this, con)
 
+            id = (retorno?.getValue("id") as Int?)?.toLong()
             saldoAnterior = retorno?.getValue("saldo_anterior") as BigDecimal?
             saldoPosterior = retorno?.getValue("saldo_posterior") as BigDecimal?
             status = retorno?.getValue("status") as String?

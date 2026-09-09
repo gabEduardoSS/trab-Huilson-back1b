@@ -22,7 +22,7 @@ class CompraHandler(
         var funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
 
         if(funcionarios.isEmpty()){
-            print("Não há funcionários com autorização para realizar compras cadastrados")
+            print("Não há funcionários com autorização para realizar compras cadastrados, deseja cadastrar?(S/N): ")
             when (readln().uppercase()) {
                 "S" -> {
                     FuncionarioHandler(funcionarioService).cadastrarFuncionario()
@@ -88,8 +88,7 @@ class CompraHandler(
                 println(produto.valores())
             }
 
-            print("Insira o ID do produto a ser comprado ou -1 para avançar com a compra: ")
-            val idProduto = readln().toLong()
+            val idProduto = validarCampoNumerico("Insira o ID do produto a ser comprado ou deixe em branco para avançar com a compra: ", tipo = 1, aceitarBranco = true, nonIntProof = "-1").toLong()
             if(idProduto == -1L){
                 if(compra.itensCompra.isEmpty()){
                     println("A compra precisa ter pelo menos um produto")
@@ -105,6 +104,10 @@ class CompraHandler(
             compra.adicionarItem(produtos.first { it.id == idProduto },quantidade)
         } while (true)
 
-        compra.valores()
+        compra.compra()
+        if(compra.id != null){
+            compra.valores()
+        }
+
     }
 }

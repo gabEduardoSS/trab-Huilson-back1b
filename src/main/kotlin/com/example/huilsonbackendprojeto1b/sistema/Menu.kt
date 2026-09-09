@@ -2,6 +2,7 @@ package com.example.huilsonbackendprojeto1b.sistema
 
 import com.example.huilsonbackendprojeto1b.enumeradores.OpcoesMenu
 import com.example.huilsonbackendprojeto1b.sistema.handlers.OpcoesHandler
+import com.example.huilsonbackendprojeto1b.utils.validarCampoNumerico
 
 fun mainMenu(handlers: Map<OpcoesMenu, OpcoesHandler>) {
     do {
@@ -14,8 +15,7 @@ fun mainMenu(handlers: Map<OpcoesMenu, OpcoesHandler>) {
         }
 
         do {
-            print("Insira a opção: ")
-            opcao = readln().toInt()
+            opcao = validarCampoNumerico("Insira a opção: ", tipo = 1).toInt()
             if(opcao !in OpcoesMenu.entries.indices){
                 println("Opção incorreta")
                 continue
@@ -40,8 +40,7 @@ fun mainMenu(handlers: Map<OpcoesMenu, OpcoesHandler>) {
             }
 
             do{
-                print("Insira a opção: ")
-                subOpcao = readln().toInt()
+                subOpcao = validarCampoNumerico("Insira a opção: ", tipo = 1).toInt()
                 if(subOpcao !in 0..opcoesHandler.size){
                     println(opcoesHandler.size)
                     println("Opção inválida")
