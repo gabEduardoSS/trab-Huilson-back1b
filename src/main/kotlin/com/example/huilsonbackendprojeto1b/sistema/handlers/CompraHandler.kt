@@ -19,24 +19,10 @@ class CompraHandler(
 
     private fun realizarCompra(){
 
-        var funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
+        val funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
 
         if(funcionarios.isEmpty()){
-            print("Não há funcionários com autorização para realizar compras cadastrados, deseja cadastrar?(S/N): ")
-            when (readln().uppercase()) {
-                "S" -> {
-                    FuncionarioHandler(funcionarioService).cadastrarFuncionario()
-                    funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
-                }
-                "N" -> {
-                    println("Retornando")
-                    return
-                }
-                else -> {
-                    println("Opção inválida, retornando")
-                    return
-                }
-            }
+            print("Não há funcionários com autorização para realizar vendas: ")
         }
 
         println("----<| Funcionários |>----")

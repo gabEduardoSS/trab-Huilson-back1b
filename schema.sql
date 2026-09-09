@@ -93,6 +93,25 @@ CREATE TABLE item_compra(
     quantidade INT NOT NULL
 );
 
+CREATE TABLE venda(
+   id SERIAL PRIMARY KEY,
+   id_transacao INT REFERENCES transacao(id) NOT NULL,
+   id_funcionario INT REFERENCES funcionario(id) NOT NULL,
+   valor_total NUMERIC(19, 4) NOT NULL,
+   status VARCHAR(30) NOT NULL,
+   descricao VARCHAR(255),
+   data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE item_venda(
+    id SERIAL PRIMARY KEY,
+    id_compra INT REFERENCES compra(id) NOT NULL,
+    id_produto INT REFERENCES caixa_de_agua(id) NOT NULL,
+    id_movimentacao INT REFERENCES movimentacao(id) NOT NULL,
+    preco_unitario NUMERIC(19, 4) NOT NULL,
+    quantidade INT NOT NULL
+);
+
 CREATE OR REPLACE FUNCTION validar_saldo_transacao()
     RETURNS TRIGGER AS $$
 DECLARE
