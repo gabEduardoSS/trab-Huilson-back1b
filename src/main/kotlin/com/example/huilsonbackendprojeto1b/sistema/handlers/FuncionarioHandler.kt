@@ -23,7 +23,7 @@ class FuncionarioHandler(
         "Reativar" to { alterarStatus("ativar") }
     )
 
-    fun cadastrarFuncionario() {
+    fun cadastrarFuncionario(cargoPreSetado: Cargo? = null) {
         println("----<| Cadastrar Funcionário |>----")
         val nome = validarCampoString("Digite o nome do funcionário: ")
 
@@ -71,20 +71,24 @@ class FuncionarioHandler(
             break
         } while (true)
 
-        var cargo: Cargo
-        Cargo.entries.forEach { c ->
-            println("${c.ordinal} - ${c.name.replace("_", " ")}")
-        }
-        do {
-            val codigo = validarCampoNumerico("Escolha o cargo: ", tipo = 1).toInt()
-            if (codigo !in Cargo.entries.indices) {
-                println("Código do cargo não existe")
-                continue
-            }
-            cargo = Cargo.entries[codigo]
-            break
-        } while (true)
 
+        var cargo: Cargo
+        if(cargoPreSetado != null) {
+            cargo = cargoPreSetado
+        } else {
+            Cargo.entries.forEach { c ->
+                println("${c.ordinal} - ${c.name.replace("_", " ")}")
+            }
+            do {
+                val codigo = validarCampoNumerico("Escolha o cargo: ", tipo = 1).toInt()
+                if (codigo !in Cargo.entries.indices) {
+                    println("Código do cargo não existe")
+                    continue
+                }
+                cargo = Cargo.entries[codigo]
+                break
+            } while (true)
+        }
         val funcionario = Funcionario(
             nome = nome,
             cpf = cpf,

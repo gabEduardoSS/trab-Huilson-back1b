@@ -22,7 +22,8 @@ class CompraHandler(
         val funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
 
         if(funcionarios.isEmpty()){
-            print("Não há funcionários com autorização para realizar vendas: ")
+            print("Não há funcionários com autorização para realizar compras")
+            return
         }
 
         println("----<| Funcionários |>----")
@@ -32,8 +33,7 @@ class CompraHandler(
 
         var idFuncionario: Long = 0
         do{
-            print("Insira o ID do funcionário responsável: ")
-            idFuncionario = readln().toLong()
+            idFuncionario = validarCampoNumerico("Insira o ID do funcionário responsável: ", tipo=1).toLong()
             if (funcionarios.none{ it.id == idFuncionario }) {
                 println("ID inválido")
                 continue
@@ -90,7 +90,7 @@ class CompraHandler(
             compra.adicionarItem(produtos.first { it.id == idProduto },quantidade)
         } while (true)
 
-        compra.compra()
+        compraService.realizarCompra(compra)
         if(compra.id != null){
             compra.valores()
         }

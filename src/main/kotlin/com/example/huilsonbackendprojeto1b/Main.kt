@@ -1,6 +1,7 @@
 package com.example.huilsonbackendprojeto1b
 
 import com.example.huilsonbackendprojeto1b.enumeradores.OpcoesMenu
+import com.example.huilsonbackendprojeto1b.service.CaixaService
 import com.example.huilsonbackendprojeto1b.service.ClienteService
 import com.example.huilsonbackendprojeto1b.service.CompraService
 import com.example.huilsonbackendprojeto1b.service.FuncionarioService
@@ -20,13 +21,14 @@ fun main(args: Array<String>) {
     val produtoService = ProdutoService()
     val vendaService = VendaService()
     val compraService = CompraService()
+    val caixaService = CaixaService()
 
     val produtoHandler = ProdutoHandler(produtoService)
     val clienteHandler = ClienteHandler(clienteService)
     val funcionarioHandler = FuncionarioHandler(funcionarioService)
-    val vendaHandler = VendaHandler(vendaService)
+    val vendaHandler = VendaHandler(vendaService, funcionarioService, produtoService, clienteService)
     val compraHandler = CompraHandler(compraService, produtoService, funcionarioService)
-    val caixaHandler = CaixaHandler()
+    val caixaHandler = CaixaHandler(caixaService)
 
     val handlers = mapOf(
         OpcoesMenu.PRODUTO to produtoHandler,

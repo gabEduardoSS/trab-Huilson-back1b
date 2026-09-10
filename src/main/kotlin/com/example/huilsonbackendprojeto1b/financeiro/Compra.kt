@@ -1,16 +1,11 @@
 package com.example.huilsonbackendprojeto1b.financeiro
 
-import com.example.huilsonbackendprojeto1b.enumeradores.StatusFinanceiro
 import com.example.huilsonbackendprojeto1b.pessoas.Funcionario
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
-import com.example.huilsonbackendprojeto1b.repositorio.JPACompra
-import com.example.huilsonbackendprojeto1b.repositorio.JPAConexao
-import com.example.huilsonbackendprojeto1b.repositorio.JPAMovimentacao
 import com.example.huilsonbackendprojeto1b.utils.formatacaoDinheiro
 import java.math.BigDecimal
-import java.sql.Connection
-import java.sql.SQLException
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Compra(
     var id: Long? = null,
@@ -32,37 +27,22 @@ class Compra(
         valorTotal += produto.preco * quantidade.toBigDecimal()
     }
 
-    fun compra(){
-        var con: Connection? = null
-        try{
-            con = JPAConexao.conectar()
-
-            val retorno = JPACompra.criarCompra(this, con)
-
-            id = (retorno?.getValue("id") as Int?)?.toLong()
-            status = retorno?.getValue("status") as String?
-            data = retorno?.getValue("data") as LocalDateTime?
-        } catch(e: SQLException){
-            println("ERRO: ${e.stackTrace.joinToString(", ")}")
-        } finally {
-            con?.close()
-        }
-    }
-
     fun valores(){
         print("""
-            -----------------------
+            ------<| COMPRA |>------
             ID: $id,
             Valor Total: ${formatacaoDinheiro(valorTotal)},
             Status Compra: $status,
             Descricao: $descricao,
             Funcionario: ${requisitor.id},
             Desconto: ${formatacaoDinheiro(valorDesconto)},
+            Data: ${data?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))}
             ------------------------
             
         """.trimIndent())
         itensCompra.forEach { item ->
             item.valores()
         }
+        println()
     }
 }

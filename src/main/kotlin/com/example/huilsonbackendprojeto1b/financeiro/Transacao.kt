@@ -2,12 +2,8 @@ package com.example.huilsonbackendprojeto1b.financeiro
 
 import com.example.huilsonbackendprojeto1b.enumeradores.TipoTransacao
 import com.example.huilsonbackendprojeto1b.pessoas.Pessoa
-import com.example.huilsonbackendprojeto1b.repositorio.JPAConexao
-import com.example.huilsonbackendprojeto1b.repositorio.JPATransacao
 import com.example.huilsonbackendprojeto1b.utils.formatacaoDinheiro
 import java.math.BigDecimal
-import java.sql.Connection
-import java.sql.SQLException
 import java.time.LocalDateTime
 
 class Transacao(
@@ -22,25 +18,6 @@ class Transacao(
     var status: String? = null
 
     var dataMovimentacao : LocalDateTime? = null
-
-    fun transacao(){
-        var con: Connection? = null
-        try{
-            con = JPAConexao.conectar()
-
-            val retorno = JPATransacao.criarTransacao(this, con)
-
-            id = (retorno?.getValue("id") as Int?)?.toLong()
-            saldoAnterior = retorno?.getValue("saldo_anterior") as BigDecimal?
-            saldoPosterior = retorno?.getValue("saldo_posterior") as BigDecimal?
-            status = retorno?.getValue("status") as String?
-            dataMovimentacao = retorno?.getValue("data") as LocalDateTime?
-        } catch(e: SQLException){
-            println("ERRO: ${e.stackTrace.joinToString(", ")}")
-        } finally {
-            con?.close()
-        }
-    }
 
     fun valores(){
         print("""

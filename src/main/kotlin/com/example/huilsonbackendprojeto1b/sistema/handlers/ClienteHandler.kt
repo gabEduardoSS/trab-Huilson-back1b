@@ -16,7 +16,7 @@ class ClienteHandler(
         "Alterar" to {alterarCliente()},
     )
 
-    private fun cadastrarCliente(){
+    fun cadastrarCliente(){
         println("----<| Cadastrar Cliente |>----")
         val nome = validarCampoString("Digite o nome do cliente: ")
 

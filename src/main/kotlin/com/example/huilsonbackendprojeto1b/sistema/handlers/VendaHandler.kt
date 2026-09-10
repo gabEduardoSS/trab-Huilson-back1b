@@ -1,7 +1,8 @@
 package com.example.huilsonbackendprojeto1b.sistema.handlers
 
 import com.example.huilsonbackendprojeto1b.enumeradores.Cargo
-import com.example.huilsonbackendprojeto1b.financeiro.Compra
+import com.example.huilsonbackendprojeto1b.financeiro.Venda
+import com.example.huilsonbackendprojeto1b.service.ClienteService
 import com.example.huilsonbackendprojeto1b.service.FuncionarioService
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import com.example.huilsonbackendprojeto1b.service.VendaService
@@ -11,23 +12,24 @@ import com.example.huilsonbackendprojeto1b.utils.validarCampoString
 class VendaHandler(
     private val vendaService: VendaService,
     private val funcionarioService: FuncionarioService,
-    private val produtoService: ProdutoService
+    private val produtoService: ProdutoService,
+    private val clienteService: ClienteService,
 ) : OpcoesHandler {
     override fun opcoes(): List<Pair<String, () -> Unit>> = listOf(
         "Realizar Venda" to { realizarVenda() },
         "Consultar" to { consultarVendas() },
-
         )
 
     fun realizarVenda() {
-        var funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
+        var funcionarios = funcionarioService.consultarPorCargo(Cargo.ATENDIMENTO)
+        var clientes = clienteService.listarClientes()
 
         if (funcionarios.isEmpty()) {
-            print("Não há funcionários com autorização para realizar compras cadastrados, deseja cadastrar?(S/N): ")
+            print("Não há funcionários com autorização para realizar vendas cadastrados, deseja cadastrar?(S/N): ")
             when (readln().uppercase()) {
                 "S" -> {
-                    FuncionarioHandler(funcionarioService).cadastrarFuncionario()
-                    funcionarios = funcionarioService.consultarPorCargo(Cargo.FINANCEIRO)
+                    FuncionarioHandler(funcionarioService).cadastrarFuncionario(Cargo.ATENDIMENTO)
+                    funcionarios = funcionarioService.consultarPorCargo(Cargo.ATENDIMENTO)
                 }
 
                 "N" -> {
@@ -58,21 +60,12 @@ class VendaHandler(
             break
         } while (true)
 
-        val descricao = validarCampoString("Insira a descrição: ", aceitarBranco = true)
-
-        val compra = Compra(
-            requisitor = funcionarios.first { it.id == idFuncionario },
-            descricao = descricao,
-        )
-
-        var produtos = produtoService.listarProdutos()
-
-        if (produtos.isEmpty()) {
-            print("Não há produtos cadastrados, deseja cadastrar?(S/N): ")
+        if (clientes.isEmpty()) {
+            print("Não há clientes cadastrados, deseja cadastrar?(S/N): ")
             when (readln().uppercase()) {
                 "S" -> {
-                    ProdutoHandler(produtoService).cadastrarProduto()
-                    produtos = produtoService.listarProdutos()
+                    ClienteHandler(clienteService).cadastrarCliente()
+                    clientes = clienteService.listarClientes()
                 }
 
                 "N" -> {
@@ -87,6 +80,36 @@ class VendaHandler(
             }
         }
 
+        println("----<| Clientes |>----")
+        clientes.forEach { cliente ->
+            println(cliente.valores())
+        }
+
+        var idCliente: Long = 0
+        do {
+            idCliente = validarCampoNumerico("Insira o ID do cliente: ", tipo=1).toLong()
+            if (clientes.none { it.id == idCliente }) {
+                println("ID inválido")
+                continue
+            }
+            break
+        } while (true)
+
+        val descricao = validarCampoString("Insira a descrição: ", aceitarBranco = true)
+
+        val venda = Venda(
+            vendedor = funcionarios.first { it.id == idFuncionario },
+            cliente = clientes.first { it.id == idCliente },
+            descricao = descricao,
+        )
+
+        val produtos = produtoService.consultarPorStatus("ativo")
+
+        if (produtos.isEmpty()) {
+            print("Não há produtos ativos")
+            return
+        }
+
         do {
             println("----<| Produtos |>----")
             produtos.forEach { produto ->
@@ -94,14 +117,15 @@ class VendaHandler(
             }
 
             val idProduto = validarCampoNumerico(
-                "Insira o ID do produto a ser comprado ou deixe em branco para avançar com a compra: ",
+                "Insira o ID do produto a ser vendido ou deixe em branco para avançar com a venda: ",
                 tipo = 1,
                 aceitarBranco = true,
                 nonIntProof = "-1"
             ).toLong()
+
             if (idProduto == -1L) {
-                if (compra.itensCompra.isEmpty()) {
-                    println("A compra precisa ter pelo menos um produto")
+                if (venda.itensVenda.isEmpty()) {
+                    println("A venda precisa ter pelo menos um produto")
                     continue
                 }
                 break
@@ -110,13 +134,16 @@ class VendaHandler(
                 println("ID inválido")
                 continue
             }
-            val quantidade = validarCampoNumerico("Digite a quantidade recebida: ", tipo = 1).toInt()
-            compra.adicionarItem(produtos.first { it.id == idProduto }, quantidade)
+
+            val quantidade = validarCampoNumerico("Digite a quantidade a ser vendida: ", tipo = 1).toInt()
+
+            venda.adicionarItem(produtos.first { it.id == idProduto }, quantidade)
         } while (true)
 
-        compra.compra()
-        if (compra.id != null) {
-            compra.valores()
+
+        vendaService.realizarVenda(venda)
+        if (venda.status != null) {
+            venda.valores()
         }
     }
     fun consultarVendas() {}
