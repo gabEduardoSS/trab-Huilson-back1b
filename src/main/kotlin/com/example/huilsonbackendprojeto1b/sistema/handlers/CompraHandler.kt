@@ -28,7 +28,7 @@ class CompraHandler(
 
         println("----<| Funcionários |>----")
         funcionarios.forEach { funcionario ->
-            println(funcionario.valores())
+            funcionario.valores()
         }
 
         var idFuncionario: Long = 0

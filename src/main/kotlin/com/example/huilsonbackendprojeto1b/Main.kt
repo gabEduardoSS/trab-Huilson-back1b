@@ -10,6 +10,7 @@ import com.example.huilsonbackendprojeto1b.service.VendaService
 import com.example.huilsonbackendprojeto1b.sistema.handlers.CaixaHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.ClienteHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.CompraHandler
+import com.example.huilsonbackendprojeto1b.sistema.handlers.ConsultasHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.FuncionarioHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.ProdutoHandler
 import com.example.huilsonbackendprojeto1b.sistema.handlers.VendaHandler
@@ -29,6 +30,7 @@ fun main(args: Array<String>) {
     val vendaHandler = VendaHandler(vendaService, funcionarioService, produtoService, clienteService)
     val compraHandler = CompraHandler(compraService, produtoService, funcionarioService)
     val caixaHandler = CaixaHandler(caixaService)
+    val consultasHandler = ConsultasHandler()
 
     val handlers = mapOf(
         OpcoesMenu.PRODUTO to produtoHandler,
@@ -37,6 +39,7 @@ fun main(args: Array<String>) {
         OpcoesMenu.VENDA to vendaHandler,
         OpcoesMenu.COMPRA to compraHandler,
         OpcoesMenu.CAIXA to caixaHandler,
+        OpcoesMenu.CONSULTAS to consultasHandler
     )
 
     mainMenu(handlers)

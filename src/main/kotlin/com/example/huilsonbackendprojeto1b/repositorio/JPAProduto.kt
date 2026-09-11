@@ -1,7 +1,7 @@
 package com.example.huilsonbackendprojeto1b.repositorio
 
 import com.example.huilsonbackendprojeto1b.enumeradores.Cor
-import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
+import com.example.huilsonbackendprojeto1b.enumeradores.Formato
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
 import java.sql.Connection
@@ -85,7 +85,7 @@ class JPAProduto(
                     dimensao = dimensao,
                     cor = Cor.valueOf(resultado.getString("cor")),
                     material = Material.valueOf(resultado.getString("material")),
-                    formato = Formatos.valueOf(resultado.getString("formato")),
+                    formato = Formato.valueOf(resultado.getString("formato")),
                     fornecedor = resultado.getString("fornecedor"),
                     preco = resultado.getBigDecimal("preco"),
                     dtCriacao = resultado.getTimestamp("dt_criacao").toLocalDateTime(),
@@ -97,8 +97,7 @@ class JPAProduto(
 
             stmt.close()
         } catch (e: SQLException) {
-            println(e.printStackTrace())
-        } finally {
+            println("ERRO: ${e.stackTrace.joinToString(", ")}, ${e.message}")
             c?.close()
         }
         return produtos

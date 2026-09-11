@@ -1,18 +1,10 @@
 package com.example.huilsonbackendprojeto1b.produto
 
 import com.example.huilsonbackendprojeto1b.enumeradores.Cor
-import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
+import com.example.huilsonbackendprojeto1b.enumeradores.Formato
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
 import com.example.huilsonbackendprojeto1b.utils.formatacaoDinheiro
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -27,7 +19,7 @@ open class CaixaDeAgua(
 
     var material : Material = Material.FIBRA_DE_VIDRO,
 
-    var formato : Formatos = Formatos.CONICO,
+    var formato : Formato = Formato.CONICO,
 
     var fornecedor : String = "",
     var preco : BigDecimal = BigDecimal.ZERO,
@@ -38,23 +30,22 @@ open class CaixaDeAgua(
 
     val dtCriacao: LocalDateTime = LocalDateTime.now()
 ){
-    open fun valores() : String{
-        return """
-            
-        ID: $id,
-        Marca: $marca,
-        Modelo: $modelo,
-        Dimensão(AxLxP): $dimensao,
-        Cor: $cor,
-        Material: $material,
-        Formato: $formato,
-        Fornecedor: $fornecedor,
-        Preço: ${formatacaoDinheiro(preco)}
-        Status: $status
-        Estoque Atual: $quantidade,
-        Data de Criação: ${dtCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))},
-        ---------------------
-        
-        """.trimIndent()
+    open fun valores() {
+        println("""
+            ----------<| PRODUTO |>----------
+            ID: $id,
+            Marca: $marca,
+            Modelo: $modelo,
+            Dimensão(AxLxP): $dimensao,
+            Cor: $cor,
+            Material: $material,
+            Formato: $formato,
+            Fornecedor: $fornecedor,
+            Preço: ${formatacaoDinheiro(preco)}
+            Status: $status
+            Estoque Atual: $quantidade,
+            Data de Criação: ${dtCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))},
+            ---------------------------------
+        """.trimIndent())
     }
 }

@@ -118,7 +118,7 @@ class FuncionarioHandler(
 
         println("----<| Funcionários cadastrados |>----")
         funcionarios.forEach { funcionario ->
-            println(funcionario.valores())
+            funcionario.valores()
         }
     }
 
@@ -135,7 +135,7 @@ class FuncionarioHandler(
 
         println("----<| Funcionários $status |>----")
         funcionarios.forEach { funcionario ->
-            println(funcionario.valores())
+            funcionario.valores()
         }
     }
 
@@ -161,7 +161,7 @@ class FuncionarioHandler(
         }
 
         funcionarios.forEach { funcionario ->
-            println(funcionario.valores())
+            funcionario.valores()
         }
     }
 
@@ -175,7 +175,7 @@ class FuncionarioHandler(
 
         println("----<| Funcionários Cadastrados |>----")
         funcionarios.forEach { funcionario ->
-            println(funcionario.valores())
+            funcionario.valores()
         }
 
         var idFuncionario: Long
@@ -289,7 +289,7 @@ class FuncionarioHandler(
         println("----<| Funcionários ${stringConsulta}s |>----")
         funcionarios.forEach { funcionario ->
             IDs.add(funcionario.id)
-            println(funcionario.valores())
+            funcionario.valores()
         }
 
         var idFuncionario: Long = 0

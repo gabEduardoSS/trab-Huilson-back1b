@@ -3,6 +3,7 @@ package com.example.huilsonbackendprojeto1b.logistica
 import com.example.huilsonbackendprojeto1b.enumeradores.TipoMovimentacao
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 open class Movimentacao(
     var id: Long? = null,
@@ -18,7 +19,8 @@ open class Movimentacao(
     var dataMovimentacao: LocalDateTime? = null
 
     fun valores(){
-        print("""
+        println("""
+            --------<| MOVIMENTAÇÃO |>--------
             Quantidade: ${quantidade},
             ID do Produto: ${produto.id},
             Tipo: ${tipo.name},
@@ -26,7 +28,8 @@ open class Movimentacao(
             Quantidade Anterior: ${quantidadeAnterior},
             Quantidade Posterior: ${quantidadePosterior},
             Status: ${status},
-            Data: $dataMovimentacao
+            Data: ${dataMovimentacao?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))}
+            ----------------------------------
         """.trimIndent())
     }
 }

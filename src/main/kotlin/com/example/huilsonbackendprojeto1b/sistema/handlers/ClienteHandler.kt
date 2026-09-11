@@ -74,7 +74,7 @@ class ClienteHandler(
             return
         }
         clientes.forEach {cliente ->
-            println(cliente.valores())
+            cliente.valores()
         }
     }
 
@@ -88,7 +88,7 @@ class ClienteHandler(
 
         println("----<| Clientes Cadastrados |>----")
         clientes.forEach { cliente ->
-            println(cliente.valores())
+            cliente.valores()
         }
 
         var idCliente: Long

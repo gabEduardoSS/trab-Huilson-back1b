@@ -1,9 +1,7 @@
 package com.example.huilsonbackendprojeto1b.pessoas
 
 import com.example.huilsonbackendprojeto1b.enumeradores.TipoPessoa
-import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class Cliente(
@@ -25,9 +23,9 @@ class Cliente(
     dtNasc = dtNasc,
     tipo = TipoPessoa.CLIENTE,
 ){
-    fun valores(): String{
-        return """
-            
+    override fun valores(){
+        println("""
+            -----------<| CLIENTE |>-----------
             ID: $id,
             Nome: $nome,
             CPF: $cpf,
@@ -37,8 +35,7 @@ class Cliente(
             Data de Nascimento: ${if(dtNasc != null) dtNasc!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) else "null"},
             Dividas em aberto: ${if(dividasAbertas) "SIM" else "NÃO"}
             Data do Cadastro: ${dtCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))},
-            ---------------------
-            
-        """.trimIndent()
+            -----------------------------------
+        """.trimIndent())
     }
 }

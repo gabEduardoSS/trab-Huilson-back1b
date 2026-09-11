@@ -1,11 +1,9 @@
 package com.example.huilsonbackendprojeto1b.sistema.handlers
 
 import com.example.huilsonbackendprojeto1b.enumeradores.Cor
-import com.example.huilsonbackendprojeto1b.enumeradores.Formatos
+import com.example.huilsonbackendprojeto1b.enumeradores.Formato
 import com.example.huilsonbackendprojeto1b.enumeradores.Material
-import com.example.huilsonbackendprojeto1b.enumeradores.TipoMovimentacao
 import com.example.huilsonbackendprojeto1b.produto.CaixaDeAgua
-import com.example.huilsonbackendprojeto1b.logistica.Movimentacao
 import com.example.huilsonbackendprojeto1b.service.ProdutoService
 import com.example.huilsonbackendprojeto1b.utils.validarCampoString
 import com.example.huilsonbackendprojeto1b.utils.validarCampoNumerico
@@ -64,17 +62,17 @@ class ProdutoHandler(
             break
         } while (true)
 
-        var formato: Formatos
-        Formatos.entries.forEach { f ->
+        var formato: Formato
+        Formato.entries.forEach { f ->
             println("${f.ordinal} - ${f.name.replace("_", " ")}")
         }
         do {
             val codigoFormato = validarCampoNumerico("Escolha o formato: ", tipo = 1).toInt()
-            if (codigoFormato !in Formatos.entries.indices) {
+            if (codigoFormato !in Formato.entries.indices) {
                 println("Código do formato não existe")
                 continue
             }
-            formato = Formatos.entries[codigoFormato]
+            formato = Formato.entries[codigoFormato]
             break
         } while (true)
 
@@ -117,7 +115,7 @@ class ProdutoHandler(
             return
         }
         produtos.forEach { produto ->
-            println(produto.valores())
+            produto.valores()
         }
     }
 
@@ -131,7 +129,7 @@ class ProdutoHandler(
 
         println("----<| Produtos cadastrados |>----")
         produtos.forEach { produto ->
-            println(produto.valores())
+            produto.valores()
         }
 
         var idProduto: Long = 0
@@ -205,8 +203,8 @@ class ProdutoHandler(
             break
         } while (true)
 
-        var formato: Formatos = produtoAtual.formato
-        Formatos.entries.forEach { f ->
+        var formato: Formato = produtoAtual.formato
+        Formato.entries.forEach { f ->
             println("${f.ordinal} - ${f.name.replace("_", " ")}")
         }
         do {
@@ -215,11 +213,11 @@ class ProdutoHandler(
                 break
             }
             val codigoFormato = formatoInput.toInt()
-            if (codigoFormato !in Formatos.entries.indices) {
+            if (codigoFormato !in Formato.entries.indices) {
                 println("Código do formato não existe")
                 continue
             }
-            formato = Formatos.entries[codigoFormato]
+            formato = Formato.entries[codigoFormato]
             break
         } while (true)
 
@@ -264,7 +262,7 @@ class ProdutoHandler(
         println("----<| Produtos ${stringConsulta}s |>----")
         produtos.forEach { produto ->
             IDs.add(produto.id)
-            println(produto.valores())
+            produto.valores()
         }
 
         var idProduto: Long = 0

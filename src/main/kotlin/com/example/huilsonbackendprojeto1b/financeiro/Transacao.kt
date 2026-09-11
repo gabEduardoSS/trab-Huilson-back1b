@@ -5,6 +5,7 @@ import com.example.huilsonbackendprojeto1b.pessoas.Pessoa
 import com.example.huilsonbackendprojeto1b.utils.formatacaoDinheiro
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Transacao(
     var id: Long? = null,
@@ -20,14 +21,16 @@ class Transacao(
     var dataMovimentacao : LocalDateTime? = null
 
     fun valores(){
-        print("""
+        println("""
+            --------<| TRANSAÇÃO |>--------
             Valor: ${formatacaoDinheiro(valor)},
             ID da Pessoa: ${pessoa.id},
             Tipo: ${tipoTransacao.name},
             Saldo Anterior: ${saldoAnterior},
             Saldo Posterior: ${saldoPosterior},
             Status: ${status},
-            Data: $dataMovimentacao
+            Data: ${dataMovimentacao?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))}
+            -------------------------------
         """.trimIndent())
     }
 }

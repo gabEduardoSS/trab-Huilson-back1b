@@ -24,7 +24,8 @@ class ItemCompra (
             ID compra: $id,
             ID movimentacao: ${movimentacao?.id},
             ID produto: ${produto.id},
-            Preço: ${formatacaoDinheiro(produto.preco)},
+            Preço: ${formatacaoDinheiro(precoUnitario)},
+            Valor Total: ${formatacaoDinheiro(precoUnitario * (quantidade).toBigDecimal())},
             Quantidade: $quantidade
         ----------------------------
         """.trimIndent())
