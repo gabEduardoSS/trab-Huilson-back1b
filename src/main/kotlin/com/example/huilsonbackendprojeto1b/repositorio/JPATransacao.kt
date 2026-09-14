@@ -62,7 +62,7 @@ object JPATransacao {
                     telefone = rs.getString("telefone"),
                     cidade = rs.getString("cidade"),
                     endereco = rs.getString("endereco"),
-                    dtNasc = rs.getDate("dt_nasc").toLocalDate(),
+                    dtNasc = rs.getDate("dt_nasc")?.toLocalDate(),
                     tipo = TipoPessoa.valueOf(rs.getString("tipo_pessoa")),
                 )
 

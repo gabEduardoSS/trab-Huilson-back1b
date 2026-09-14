@@ -242,7 +242,7 @@ class ProdutoHandler(
 
         try {
             produtoService.alterarProduto(idProduto, produtoAtualizado)
-            println("Produto atualizado: ${produtoAtualizado.valores()}")
+            produtoAtualizado.valores()
         } catch (e: Exception) {
             println("Erro ao atualizar produto: $e")
         }
@@ -252,7 +252,6 @@ class ProdutoHandler(
         val status = if (tipo == "ativar") "ativo" else "desativado"
         val stringConsulta = if (tipo == "ativar") "desativado" else "ativo"
         val produtos = produtoService.consultarPorStatus(stringConsulta)
-        val IDs: MutableList<Long?> = mutableListOf()
 
         if (produtos.isEmpty()) {
             print("Não há produtos ${stringConsulta}s")
@@ -261,15 +260,13 @@ class ProdutoHandler(
 
         println("----<| Produtos ${stringConsulta}s |>----")
         produtos.forEach { produto ->
-            IDs.add(produto.id)
             produto.valores()
         }
 
         var idProduto: Long = 0
         do {
-            print("Insira o ID do produto a ser $status: ")
-            idProduto = readln().toLong()
-            if (idProduto !in IDs) {
+            idProduto = validarCampoString("Insira o ID do produto a ser $status: ").toLong()
+            if (produtos.none { it.id == idProduto }) {
                 println("ID inválido")
                 continue
             }

@@ -91,7 +91,7 @@ object JPAVenda {
         return null
     }
 
-    fun consultarVendas(con: Connection? = null): List<Compra>?{
+    fun consultarVendas(con: Connection? = null): List<Venda>?{
         var conexaoInterna: Connection? = null
         try{
             conexaoInterna = con ?: JPAConexao.conectar()

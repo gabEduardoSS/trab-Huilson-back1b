@@ -21,7 +21,7 @@ class ProdutoService {
 
     fun alterarStatus(id: Long, status: String) {
         try {
-            jpaProduto.alterarCampo(id, "status", status)
+            jpaProduto.alterarStatus(id, status)
             println("Produto ${if (status == "desativado") status else "reativado"}")
         } catch (e: SQLException) {
             println("ERRO: ${e.printStackTrace()}")

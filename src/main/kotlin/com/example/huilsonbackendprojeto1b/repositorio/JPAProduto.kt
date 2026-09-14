@@ -108,7 +108,7 @@ class JPAProduto(
             c = JPAConexao.conectar()
 
             val sql = "UPDATE caixa_de_agua SET marca = ?, modelo = ?, dimensao = ?, cor = ?, " +
-                    "material = ?, formato = ?, fornecedor = ?, preco = ?, quantidade = 0 WHERE id = ?"
+                    "material = ?, formato = ?, fornecedor = ?, preco = ? WHERE id = ?"
 
             val stmt = c!!.prepareStatement(sql)
             val doublePrecision = c!!.createArrayOf("float8", caixa.dimensao.toTypedArray())
@@ -135,10 +135,10 @@ class JPAProduto(
         return caixa
     }
 
-    fun alterarCampo(id: Long, campo: String, valor: String) {
+    fun alterarStatus(id: Long, valor: String) {
         try {
             c = JPAConexao.conectar()
-            val sql = "UPDATE caixa_de_agua SET $campo = ? WHERE id = ?"
+            val sql = "UPDATE caixa_de_agua SET status = ? WHERE id = ?"
             val stmt = c!!.prepareStatement(sql)
             stmt.setString(1, valor)
             stmt.setLong(2, id)
