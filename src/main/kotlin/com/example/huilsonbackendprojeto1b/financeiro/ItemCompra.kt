@@ -11,6 +11,7 @@ class ItemCompra (
     val produto: CaixaDeAgua,
     val precoUnitario: BigDecimal = produto.preco,
     val quantidade: Int,
+    val precoTotal: BigDecimal = produto.preco * BigDecimal(quantidade),
 ){
     fun setValues(id: Long, movimentacao: Movimentacao) {
         this.id = id
@@ -25,7 +26,7 @@ class ItemCompra (
             ID movimentacao: ${movimentacao?.id},
             ID produto: ${produto.id},
             Preço: ${formatacaoDinheiro(precoUnitario)},
-            Valor Total: ${formatacaoDinheiro(precoUnitario * (quantidade).toBigDecimal())},
+            Valor Total: ${formatacaoDinheiro(precoTotal)},
             Quantidade: $quantidade
         ----------------------------
         """.trimIndent())

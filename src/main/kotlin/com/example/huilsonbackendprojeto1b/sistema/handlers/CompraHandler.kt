@@ -14,7 +14,7 @@ class CompraHandler(
     private val funcionarioService: FuncionarioService
 ) : OpcoesHandler {
     override fun opcoes(): List<Pair<String, () -> Unit>> = listOf(
-        "Realizar Compra" to { realizarCompra() }
+        "Realizar Compra" to { realizarCompra() },
     )
 
     private fun realizarCompra(){
@@ -71,7 +71,7 @@ class CompraHandler(
         do {
             println("----<| Produtos |>----")
             produtos.forEach { produto ->
-                println(produto.valores())
+                produto.valores()
             }
 
             val idProduto = validarCampoNumerico("Insira o ID do produto a ser comprado ou deixe em branco para avançar com a compra: ", tipo = 1, aceitarBranco = true, nonIntProof = "-1").toLong()

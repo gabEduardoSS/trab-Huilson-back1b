@@ -41,7 +41,7 @@ object JPAMovimentacao {
         try{
             conexaoInterna = con ?: JPAConexao.conectar()
 
-            var campos = "m.id AS id_movimentacao, m.id_produto, m.quantidade, m.tipo, m.descricao, m.status, m.quantidade_anterior, m.quantidade_posterior, m.data, " +
+            val campos = "m.id AS id_movimentacao, m.id_produto, m.quantidade, m.tipo, m.descricao, m.status, m.quantidade_anterior, m.quantidade_posterior, m.data, " +
                     "c.marca, c.modelo, c.dimensao, c.cor, c.material, c.formato, c.status"
             var sql = "SELECT $campos FROM movimentacao m join caixa_de_agua c on m.id_produto = c.id"
             if(tipo != null) sql += " WHERE m.tipo = ?"

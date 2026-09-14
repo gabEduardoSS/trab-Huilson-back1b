@@ -85,21 +85,4 @@ object JPACompra {
         }
         return null
     }
-
-    fun consultarCompras(con: Connection? = null): List<Compra>?{
-        var conexaoInterna: Connection? = null
-        try{
-            conexaoInterna = con ?: JPAConexao.conectar()
-
-
-
-        } catch(e: SQLException) {
-            println("ERRO: ${e.stackTrace.joinToString(", ")}")
-        } finally {
-            if(con == null){
-                conexaoInterna?.close()
-            }
-        }
-        return null
-    }
 }

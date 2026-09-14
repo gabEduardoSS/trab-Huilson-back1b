@@ -177,9 +177,6 @@ EXECUTE FUNCTION validar_quantidade_movimentacao();
 
 -- ---------------------------------------------------------
 -- PESSOAS (base para clientes e funcionários)
--- ids 1 a 10  -> clientes
--- ids 11 a 15 -> funcionários
--- ---------------------------------------------------------
 INSERT INTO pessoa (id, nome, cpf, email, telefone, cidade, endereco, dt_nasc, tipo) VALUES
 (1,  'Ana Paula Ferreira',   '123.456.789-01', 'ana.ferreira@email.com',    '(44) 99911-1001', 'Umuarama',    'Rua das Flores, 120',        '1988-03-14', 'CLIENTE'),
 (2,  'Carlos Eduardo Souza', '234.567.891-02', 'carlos.souza@email.com',   '(44) 99911-1002', 'Maringá',     'Av. Brasil, 845',            '1975-07-22', 'CLIENTE'),
@@ -199,7 +196,6 @@ INSERT INTO pessoa (id, nome, cpf, email, telefone, cidade, endereco, dt_nasc, t
 
 -- ---------------------------------------------------------
 -- CLIENTES
--- ---------------------------------------------------------
 INSERT INTO cliente (id, dividas_abertas) VALUES
 (1,  FALSE),
 (2,  TRUE),
@@ -214,11 +210,6 @@ INSERT INTO cliente (id, dividas_abertas) VALUES
 
 -- ---------------------------------------------------------
 -- FUNCIONÁRIOS
--- turno   -> Turno.kt:  MATUTINO, VESPERTINO, NOTURNO
--- cargo   -> Cargo.kt:  INSTALACAO, FINANCEIRO, ADMINISTRATIVO, LOGISTICA, ATENDIMENTO
--- status permanece minúsculo ('ativo'/'desativado') pois não é um enum do
--- projeto, é uma String livre (ver Funcionario.kt e FuncionarioHandler.kt)
--- ---------------------------------------------------------
 INSERT INTO funcionario (id, salario, turno, cargo, status) VALUES
 (11, 2450.00, 'MATUTINO',   'ATENDIMENTO',     'ativo'),
 (12, 3800.50, 'VESPERTINO', 'ADMINISTRATIVO',  'ativo'),
@@ -228,11 +219,6 @@ INSERT INTO funcionario (id, salario, turno, cargo, status) VALUES
 
 -- ---------------------------------------------------------
 -- CAIXAS DE ÁGUA (produtos)
--- cor      -> Cor.kt:      AZUL_FORTE, AZUL_FRACO, BRANCO, CINZA
--- material -> Material.kt: POLIETILENO, FIBRA_DE_VIDRO, INOX
--- formato  -> Formato.kt: CILINDRICO, CONICO, CUBICO
--- status permanece minúsculo ('ativo'/'inativo'), mesma lógica do funcionário
--- ---------------------------------------------------------
 INSERT INTO caixa_de_agua (marca, modelo, dimensao, cor, material, formato, fornecedor, preco, status, quantidade, quantidade_minima) VALUES
 ('Fortlev',   'Fort Plus 1000L',       ARRAY[1.20, 1.20, 1.10], 'AZUL_FORTE', 'POLIETILENO',    'CILINDRICO', 'Distribuidora Água Viva',   450.00,  'ativo',   25, 5),
 ('Tigre',     'Tigre 500L',            ARRAY[0.95, 0.95, 0.85], 'BRANCO',     'POLIETILENO',    'CILINDRICO', 'Hidro Sul Distribuidora',   280.00,  'ativo',   40, 8),

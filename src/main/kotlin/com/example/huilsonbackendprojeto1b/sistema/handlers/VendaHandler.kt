@@ -17,7 +17,6 @@ class VendaHandler(
 ) : OpcoesHandler {
     override fun opcoes(): List<Pair<String, () -> Unit>> = listOf(
         "Realizar Venda" to { realizarVenda() },
-        "Consultar" to { consultarVendas() },
         )
 
     fun realizarVenda() {
@@ -146,5 +145,4 @@ class VendaHandler(
             venda.valores()
         }
     }
-    fun consultarVendas() {}
 }
